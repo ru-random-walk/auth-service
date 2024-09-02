@@ -12,4 +12,5 @@
 - Пароли должны храниться в зашифрованном виде в базе данных
 ---
 **Доменная модель:**
+
 <img width="259" alt="image" src="https://github.com/user-attachments/assets/654327d1-2c5d-40b9-96db-bd25484e7921">
