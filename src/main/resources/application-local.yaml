@@ -1,0 +1,12 @@
+server:
+  port: 8080
+
+auth:
+  issuer-url: http://localhost:${server.port}
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/auth_db
+    username: postgres
+    password: postgres
