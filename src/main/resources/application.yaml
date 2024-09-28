@@ -1,0 +1,15 @@
+auth:
+  google:
+    google-auth-url: https://www.googleapis.com/oauth2/v3
+
+jwt:
+  expire-time-in-minutes: 15
+
+spring:
+  application:
+    name: AuthService
+  flyway:
+    enabled: true
+
+server:
+  port: 8080

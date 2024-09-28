@@ -1,0 +1,17 @@
+server:
+  port: 8080
+
+auth:
+  issuer-url: ${AUTH_ISSUER_URL}
+
+
+jwt:
+  private-key: ${AUTH_JWT_PRIVATE_KEY}
+  public-key: ${AUTH_JWT_PUBLIC_KEY}
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://postgres-postgresql.default.svc.cluster.local:5432/auth_db
+    username: ${AUTH_DB_USERNAME}
+    password: ${AUTH_DB_PASSWORD}

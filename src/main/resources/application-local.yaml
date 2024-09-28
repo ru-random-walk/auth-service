@@ -1,0 +1,49 @@
+server:
+  port: 8080
+
+auth:
+  issuer-url: http://localhost:${server.port}
+
+jwt:
+  private-key:
+    MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCb1HJYIc63G8+G
+    hB8syEnMH/c3LWVHMEC+uYHfzeOHgsxCS29BOab/pr4jtj8yc9XdNARHq/UqRIyx
+    MB+wjeuBLD5uT6s3sCAvJDfe9vc4DN6QcJzKPaO/Ui7DLt4KqajZkHP2PVc2BrTh
+    Gx9IUIhEF2/hfzhNw7TvnOHWfMO6CgmNpFs/a7U2aXLLQaz6ERDDDBTIAolZ2BOT
+    KKo4oeYSVrJaf0Kwef12R24AbrKaRuXUyjNqv67zXxiBy4u4wFJoXmh9/4jQHjpZ
+    33P1PEuRH2M/+yPBK22n2tSSvVC6anUEYKzrcqxMchAuYMFdOC6oycYnPTBg4N9U
+    ymw51XCRAgMBAAECggEAKx+1Txd4Betv2FmK6RE6fv9fokjxTKyZVk6vFtj6/P7g
+    +P24ObQzN2+VEfv27EbrKe6hupXnYH2c89IOCwWTZWlxk4R/rQcUOQeMYKs2yi+h
+    jhZkBYHeZW1gXIqFTy0ZebAEr2HVVzGu79baJuCGfVWBFEXpNngRA/iF9R4M6lg7
+    NQ+zPtG1YZo6F04vVKlx99sFtXy1Qy7q4CiYhRCZaRmuCK9CAeXV133SBPeITclw
+    liEV5zZU7muqPhemPssEHR0HcIc1nO8dxLz6II+NB+XG4UeCSsr0sr31GJ85XqGU
+    V8OiHZM34cdg75CAIs9OQyI3TF8SdEXvCmKTjnzJewKBgQDIvZQRnDW7qwEtzfw7
+    LNJOskTi9xzt02EdzEmtdWDUAZrQG0lDIcPeIA/t89kon4hlf0s/f7/3goLyj8ZD
+    HqqUt0C90ALhse4gIpl5I2B++4uXx/hU4XRBv5NBJF/WQie8b3o9joF/Jho/hG7F
+    vVHi0iuU6i1k114mQjNngl14ywKBgQDGufXm7DjmnmehruvKP+frbQOOqJItHFu7
+    JfrDdbmQrsthXsLkr+CT1sEhT6FpwAAYqf54CfbbdZDl29yABNdnEK5DC4+5VN+6
+    SotO8hoqcaSNey5v5xZSc/8cYCAerHkxHtWDOivz3QSd/4plVC31P+dEgSe5Bvtp
+    DmOVYdy8kwKBgQDFrXKXWOXNFdvGWHcPatb7KjAN9VymkqarKlZPmywr+hyS3Jvr
+    oN956MbnA1+Q0nEFyjG2qT3IJdx/sreBtzwx0LfPc3yy9n3RZWEO2piW020mnYRd
+    SdsrN9Vxq7k4i9MHjBurbJ73L/VfITHYRdPScjb6oRTsne0X7c8jGkyjuwKBgQC5
+    9qs2PTfCF9nCY34i9UqB9LGvfe/MZw0wRIo0/qV3zxpjM9oNRshRkFWKZooV+6Yb
+    bnjCvBBVrd66OtRMuDsaJ3HrK5aDR/lUyw0yAzyZG19xRiRec1FgN0wzsYBdM+j1
+    HnWPJ5CZ0+nOMKPBztRy/Cne4T3a173MwbpOwBVgIQKBgQCv3B549WzvCu6mQwZ0
+    PhUdFRBxyoyK94uxg5Ak0Jlx1Q7z6TAF3UVJo8jOmRMUsdV3hWj2iCodyq3CEbRC
+    vSlasR3oeyZUI5zdzxVORxBdj8bmjcXgpq7pia+BpLT8xaFDwEMlT0TvRC7MMTGq
+    TvteFqzlTM4CxSr0Ug8itDvwXg==
+  public-key:
+    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAm9RyWCHOtxvPhoQfLMhJ
+    zB/3Ny1lRzBAvrmB383jh4LMQktvQTmm/6a+I7Y/MnPV3TQER6v1KkSMsTAfsI3r
+    gSw+bk+rN7AgLyQ33vb3OAzekHCcyj2jv1Iuwy7eCqmo2ZBz9j1XNga04RsfSFCI
+    RBdv4X84TcO075zh1nzDugoJjaRbP2u1Nmlyy0Gs+hEQwwwUyAKJWdgTkyiqOKHm
+    ElayWn9CsHn9dkduAG6ymkbl1Mozar+u818YgcuLuMBSaF5off+I0B46Wd9z9TxL
+    kR9jP/sjwSttp9rUkr1Qump1BGCs63KsTHIQLmDBXTguqMnGJz0wYODfVMpsOdVw
+    kQIDAQAB
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/auth_db
+    username: postgres
+    password: postgres
