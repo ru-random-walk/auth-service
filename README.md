@@ -13,4 +13,5 @@
 ---
 **Доменная модель:**
 
-<img width="259" alt="image" src="https://github.com/user-attachments/assets/654327d1-2c5d-40b9-96db-bd25484e7921">
+<img width="752" alt="image" src="https://github.com/user-attachments/assets/87d1abd4-2121-4503-b923-a79af9a8d5c1">
+
