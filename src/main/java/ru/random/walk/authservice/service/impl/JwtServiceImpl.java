@@ -41,7 +41,14 @@ public class JwtServiceImpl implements JwtService {
                 .signWith(getPrivateKey(), SignatureAlgorithm.RS256)
                 .claim("client_id", tokenRequest.getClientId())
                 .claim("authorities", user.getRoles().stream().map(Role::getName).toList())
-                .setExpiration(Date.from(LocalDateTime.now().plusMinutes(jwtProperties.getExpireTimeInMinutes()).atZone(ZoneId.systemDefault()).toInstant()))
+                .setExpiration(
+                        Date.from(
+                                LocalDateTime.now()
+                                        .plusMinutes(jwtProperties.getExpireTimeInMinutes())
+                                        .atZone(ZoneId.systemDefault())
+                                        .toInstant()
+                        )
+                )
                 .setSubject(user.getId().toString())
                 .compact();
 

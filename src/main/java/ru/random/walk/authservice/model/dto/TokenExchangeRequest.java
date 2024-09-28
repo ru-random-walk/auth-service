@@ -1,8 +1,9 @@
 package ru.random.walk.authservice.model.dto;
 
 
-import lombok.*;
-import lombok.experimental.SuperBuilder;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import ru.random.walk.authservice.model.enam.AuthType;
 
 @EqualsAndHashCode(callSuper = true)
