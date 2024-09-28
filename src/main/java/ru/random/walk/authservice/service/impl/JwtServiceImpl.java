@@ -72,7 +72,7 @@ public class JwtServiceImpl implements JwtService {
             var keySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(cleanKey));
             return (RSAPublicKey) keyFactory.generatePublic(keySpec);
         } catch (Exception e) {
-            log.error("Error decrypting public key");
+            log.error("Error decrypting public key", e);
             return null;
         }
     }

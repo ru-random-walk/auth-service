@@ -12,6 +12,32 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+env:
+  - name: SPRING_PROFILES_ACTIVE
+    value: test
+
+secrets:
+  - name: AUTH_DB_USERNAME
+    secret_key: AUTH_DB_USERNAME
+    secret_name: auth-secret
+
+  - name: AUTH_DB_PASSWORD
+    secret_key: AUTH_DB_PASSWORD
+    secret_name: auth-secret
+
+  - name: AUTH_ISSUER_URL
+    secret_key: AUTH_ISSUER_URL
+    secret_name: auth-secret
+
+  - name: AUTH_JWT_PRIVATE_KEY
+    secret_key: AUTH_JWT_PRIVATE_KEY
+    secret_name: auth-secret
+
+  - name: AUTH_JWT_PUBLIC_KEY
+    secret_key: AUTH_JWT_PUBLIC_KEY
+    secret_name: auth-secret
+
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: true

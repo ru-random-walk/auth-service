@@ -38,7 +38,6 @@ public class SecurityConfig {
             HttpSecurity http
     ) throws Exception {
         return http
-                .httpBasic(Customizer.withDefaults())
                 .sessionManagement(sessionManagement ->
                         sessionManagement
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -51,6 +50,7 @@ public class SecurityConfig {
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
+                .httpBasic(Customizer.withDefaults())
                 .build();
     }
 
