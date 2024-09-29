@@ -1,22 +1,19 @@
 package ru.random.walk.authservice.model.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
-/**
- *
- * @param n base64url-encoded значение модуля RSA public key
- * @param e base64url-encoded значение экспоненты RSA public key
- * @param kid The kid (key ID) Header Parameter is a hint indicating which key was used to secure the JWS.
- *            This parameter allows originators to explicitly signal a change of key to recipients.
- *            The structure of the kid value is unspecified. Its value MUST be a case-sensitive string.
- * @param kty тип ключа
- * @param alg алгоритм шифрования
- */
+@Schema(description = "JSON object that represents a cryptographic key")
 @Builder(toBuilder = true)
 public record JwkKeyDto (
-    String n,
-    String e,
-    String kid,
-    String kty,
-    String alg
+        @Schema(description = "The base64url encoded modulus value for the RSA public key")
+        String n,
+        @Schema(description = "The base64url encoded exponent value for the RSA public key")
+        String e,
+        @Schema(description = "The kid (key ID) Header Parameter is a hint indicating which key was used to secure the JWS.")
+        String kid,
+        @Schema(description = "Key type", example = "RSA")
+        String kty,
+        @Schema(description = "Cryptographic algorithm family used with the key", example = "RS256")
+        String alg
 ) {}

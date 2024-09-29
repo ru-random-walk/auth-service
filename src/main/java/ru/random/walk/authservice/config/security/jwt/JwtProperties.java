@@ -8,7 +8,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @Data
 public class JwtProperties {
-    private Long expireTimeInMinutes;
+    private Long expireTimeInSeconds;
     private String privateKey;
     private String publicKey;
+    private Integer refreshTokenExpireTimeInDays;
 }

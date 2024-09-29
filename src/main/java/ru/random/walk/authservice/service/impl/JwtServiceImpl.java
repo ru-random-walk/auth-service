@@ -7,15 +7,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.random.walk.authservice.config.AuthServiceProperties;
 import ru.random.walk.authservice.config.security.jwt.JwtProperties;
-import ru.random.walk.authservice.model.dto.TokenRequest;
+import ru.random.walk.authservice.model.dto.token.TokenRequest;
 import ru.random.walk.authservice.model.dto.TokenResponse;
 import ru.random.walk.authservice.model.entity.AuthUser;
 import ru.random.walk.authservice.model.entity.Role;
 import ru.random.walk.authservice.service.JwtService;
+import ru.random.walk.authservice.service.RefreshTokenService;
 
 import java.security.KeyFactory;
 import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
@@ -31,10 +31,11 @@ public class JwtServiceImpl implements JwtService {
 
     private final JwtProperties jwtProperties;
     private final AuthServiceProperties authServiceProperties;
+    private final RefreshTokenService refreshTokenService;
 
     @Override
     public TokenResponse generateToken(TokenRequest tokenRequest, AuthUser user) {
-        var token = Jwts.builder()
+        var accessToken = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setHeaderParam("kid", TOKEN_KEY_ID)
                 .setIssuer(authServiceProperties.getIssuerUrl())
@@ -44,7 +45,7 @@ public class JwtServiceImpl implements JwtService {
                 .setExpiration(
                         Date.from(
                                 LocalDateTime.now()
-                                        .plusMinutes(jwtProperties.getExpireTimeInMinutes())
+                                        .plusSeconds(jwtProperties.getExpireTimeInSeconds())
                                         .atZone(ZoneId.systemDefault())
                                         .toInstant()
                         )
@@ -52,10 +53,13 @@ public class JwtServiceImpl implements JwtService {
                 .setSubject(user.getId().toString())
                 .compact();
 
+        var refreshToken = refreshTokenService.refreshTokenForUser(user);
+
         return TokenResponse.builder()
                 .tokenType("Bearer")
-                .accessToken(token)
-                .expiresIn(jwtProperties.getExpireTimeInMinutes())
+                .accessToken(accessToken)
+                .refreshToken(refreshToken.getToken().toString())
+                .expiresIn(jwtProperties.getExpireTimeInSeconds())
                 .build();
     }
 
