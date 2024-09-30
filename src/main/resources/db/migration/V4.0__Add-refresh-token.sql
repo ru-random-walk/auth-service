@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS REFRESH_TOKEN(
-    token uuid primary key,
-    user_id uuid unique references auth_user,
+    user_id uuid primary key references auth_user,
+    token uuid not null,
     expires_at timestamp not null
 );

@@ -32,7 +32,7 @@ public class TokenController {
                             name = "token exchange",
                             value = """
                                             {
-                                                "grant_type": "urn:ietf:params:oauth:grant-type:token-exchang",
+                                                "grant_type": "urn:ietf:params:oauth:grant-type:token-exchange",
                                                 "subject_token": "ya29.a0AcM612wGZsQ5k3X6MJn4DB8jc8qXXASk4Pw8Q",
                                                 "subject_token_type": "Access Token",
                                                 "subject_provider": "google"

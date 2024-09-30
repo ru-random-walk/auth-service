@@ -12,6 +12,7 @@ import ru.random.walk.authservice.repository.RefreshTokenRepository;
 import ru.random.walk.authservice.service.RefreshTokenService;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -24,22 +25,24 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public RefreshTokenEntity getRefreshToken(String token) {
-        return refreshTokenRepository.findById(UUID.fromString(token))
+        return refreshTokenRepository.findByToken(UUID.fromString(token))
                 .orElseThrow(() -> new OAuth2AuthorizationException("Invalid token"));
     }
 
     @Override
     @Transactional
     public RefreshTokenEntity refreshTokenForUser(AuthUser authUser) {
-        if (refreshTokenRepository.existsByUser(authUser)) {
-            log.info("Refresh token for user {} already exists. Deleting it", authUser.getId());
-            refreshTokenRepository.deleteByUser(authUser);
+        var optionalRefreshToken = refreshTokenRepository.findById(authUser.getId());
+
+        if (optionalRefreshToken.isEmpty()) {
+            optionalRefreshToken = Optional.of(new RefreshTokenEntity());
+            optionalRefreshToken.get().setUser(authUser);
         }
 
-        RefreshTokenEntity entity = new RefreshTokenEntity();
-        entity.setUser(authUser);
-        entity.setExpiresAt(LocalDateTime.now().plusDays(jwtProperties.getRefreshTokenExpireTimeInDays()));
+        var refreshToken = optionalRefreshToken.get();
+        refreshToken.setToken(UUID.randomUUID());
+        refreshToken.setExpiresAt(LocalDateTime.now().plusDays(jwtProperties.getRefreshTokenExpireTimeInDays()));
 
-        return refreshTokenRepository.save(entity);
+        return refreshTokenRepository.save(refreshToken);
     }
 }
