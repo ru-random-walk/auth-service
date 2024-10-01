@@ -86,6 +86,12 @@ Credentials клиента передаются в заголовке запро
 Получить информацию о JWK публичного ключа. Используется ресурсными серверами для получения публичного ключа для валидации получаемых jwt токенов
 
 ---
+## Флоу авторизации и получения доступа к ресурсу через token exchange
+
+![auth-service-flow drawio](https://github.com/user-attachments/assets/0fe279b7-874c-404a-94bb-c5da16feec1c)
+
+---
+
 ## Настройка ресурсного сервера
 Для того чтобы твой сервер стал ресурсным в Random Walk API тебе нужно:
 1. Добавить в проект библиотеку `implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'`
