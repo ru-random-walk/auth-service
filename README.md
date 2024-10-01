@@ -24,7 +24,7 @@ Credentials клиента передаются в заголовке запро
 ---
 ## API сервиса авторизации ##
 
-_**POST** /token_ - эндпоинт для получения токенов доступа до Random Walk API 
+### _POST /token_ - эндпоинт для получения токенов доступа до Random Walk API 
 
 **Выходные данные** в формате _application/json_:
 - access_token = jwt токен доступа
@@ -61,3 +61,66 @@ _**POST** /token_ - эндпоинт для получения токенов д
   - refresh_token (required) = значение полученного ранее refresh_token
 
 ---
+
+### GET /.well-known/openid-configuration 
+Получить метаданные сервера авторизации. Список урл ручек из стандарта OAuth и поддерживаемых grant_type
+**Пример ответа:**
+```
+{
+    "issuer": "https://issuer-url.com/auth",               # url of issuer
+    "token_endpoint": "https://issuer-url.com/auth/token", # url of token endpoint
+    "jwks_uri": "https://issuer-url.com/auth/jwks",        # url of jwk information endpoint
+    "grant_types_supported": [                            # supported grant types
+        "urn:ietf:params:oauth:grant-type:token-exchange",
+        "refresh_token"
+    ],
+    "response_types_supported": [                         # supported response types
+        "token"
+    ]
+}
+```
+
+---
+
+### GET /jwks 
+Получить информацию о JWK публичного ключа. Используется ресурсными серверами для получения публичного ключа для валидации получаемых jwt токенов
+
+---
+## Настройка ресурсного сервера
+Для того чтобы твой сервер стал ресурсным в Random Walk API тебе нужно:
+1. Добавить в проект библиотеку `implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'`
+2. В property проекта добавить issuer_uri для ресурсного сервиса:
+```
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://place-auth-service-issuer-uri-here
+```
+3. В свой securityConfig добавить поддержку ресурсного сервера и отключить поддержку сессий (так как авторизация через jwt токены), если они не нужны самому приложению:
+```
+                .sessionManagement(configurer ->
+                        configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .oauth2ResourceServer(oauth2 ->
+                       oauth2.jwt(jwt -> jwt
+                               .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                );
+```
+4. Настроить конвертер jwt, для получения GrantedAuthority авторизированного пользователя в свой сервис, чтобы они использовались в @PreAuthorize аннотации
+```
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(
+                jwt -> {
+                    List<String> list = jwt.getClaimAsStringList("authorities");
+                    return list.stream()
+                            .map(SimpleGrantedAuthority::new)
+                            .collect(Collectors.toSet());
+                }
+        );
+        return converter;
+    }
+```
