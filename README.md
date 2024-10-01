@@ -34,24 +34,30 @@ _**POST** /token_ - эндпоинт для получения токенов д
 
 **Входные данные** различаются в зависимости от переданного grant_type.
 
-#### Grant type urn:ietf:params:oauth:grant-type:token-exchange ####
+---
+
+### Grant type urn:ietf:params:oauth:grant-type:token-exchange ###
 
 Через данный grant_type осуществляется обмен токена из сторонней системы на токен для Random Walk API
 
 **Принимает:**
 - Credentials клиента в заголовке Authorization в формате Basic Auth
 - Тело запроса в формате _application/x-www-form-urlencoded_:
- - grant_type (required) = urn:ietf:params:oauth:grant-type:token-exchange
- - subject_token (required) = Токен доступа из стороннего источника
- - subject_token_type (required) = Тип токена (На текущий момент поддерживается только Access Token)
- - subject_token_provider (required) = Название платформы в lowercase, которой пренадлежит предоставляемый токен доступа (google, yandex, etc.)
+  - grant_type (required) = urn:ietf:params:oauth:grant-type:token-exchange
+  - subject_token (required) = Токен доступа из стороннего источника
+  - subject_token_type (required) = Тип токена (На текущий момент поддерживается только Access Token)
+  - subject_token_provider (required) = Название платформы в lowercase, которой пренадлежит предоставляемый токен доступа (google, yandex, etc.)
 
-#### Grant type refresh_token ####
+---
+
+### Grant type refresh_token ###
 
 Через данный grant_type происходит обновление токена доступа через refresh_token
 
 **Принимает:**
 - Credentials клиента в заголовке Authorization в формате Basic Auth
 - Тело запроса в формате _application/x-www-form-urlencoded_:
- - grant_type (required) = refresh_token
- - refresh_token (required) = значение полученного ранее refresh_token
+  - grant_type (required) = refresh_token
+  - refresh_token (required) = значение полученного ранее refresh_token
+
+---
