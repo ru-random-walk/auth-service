@@ -27,28 +27,7 @@ public class TokenController {
     @Operation(description = "OAuth2 token endpoint")
     @PostMapping(value = "/token", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<TokenResponse> token(
-            @Parameter(examples = {
-                    @ExampleObject(
-                            name = "token exchange",
-                            value = """
-                                            {
-                                                "grant_type": "urn:ietf:params:oauth:grant-type:token-exchange",
-                                                "subject_token": "ya29.a0AcM612wGZsQ5k3X6MJn4DB8jc8qXXASk4Pw8Q",
-                                                "subject_token_type": "Access Token",
-                                                "subject_provider": "google"
-                                            }
-                                    """
-                    ),
-                    @ExampleObject(
-                            name = "refresh token",
-                            value = """
-                                    {
-                                        "grant_type": "refresh_token",
-                                        "refresh_token": "07880a4b-1677-41fd-b53d-1401eb8a3802"
-                                    }
-                                    """
-                    )
-            })
+            @Parameter(description = "application/x-www-form-urlencoded request body")
             @RequestParam Map<String, Object> body
     ) {
         String clientId = SecurityContextHolder.getContext().getAuthentication().getName();

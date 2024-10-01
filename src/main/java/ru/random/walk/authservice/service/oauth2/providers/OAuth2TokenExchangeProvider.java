@@ -22,38 +22,14 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class OAuth2TokenExchangeProvider implements OAuth2TokenProvider {
 
-    public static final String TOKEN_EXCHANGE_GRANT_TYPE = "urn:ietf:params:oauth:grant-type:token-exchange";
-    private final static String SUBJECT_TOKEN_KEY = "subject_token";
-    private final static String SUBJECT_TOKEN_TYPE_KEY = "subject_token_type";
-    private final static String SUBJECT_TOKEN_PROVIDER_KEY = "subject_token_provider";
     private static final String SUPPORTED_SUBJECT_TOKEN_TYPE = "Access Token";
 
     private final JwtService jwtService;
     private final List<AccessTokenExchanger> accessTokenExchangers;
 
     @Override
-    public boolean supports(String grantType) {
-        return TOKEN_EXCHANGE_GRANT_TYPE.equals(grantType);
-    }
-
-    @Override
-    public TokenRequest generateRequest(String clientId, Map<String, Object> body) {
-        if (!body.containsKey(SUBJECT_TOKEN_KEY)
-                || !body.containsKey(SUBJECT_TOKEN_TYPE_KEY)
-                || !body.containsKey(SUBJECT_TOKEN_PROVIDER_KEY)
-        ) {
-            throw new OAuth2BadRequestException("Invalid request");
-        }
-
-        String subjectToken = (String) body.get(SUBJECT_TOKEN_KEY);
-        String subjectType = (String) body.get(SUBJECT_TOKEN_TYPE_KEY);
-        String subjectProvider = (String) body.get(SUBJECT_TOKEN_PROVIDER_KEY);
-        return TokenExchangeRequest.builder()
-                .clientId(clientId)
-                .subjectToken(subjectToken)
-                .subjectProvider(AuthType.getByName(subjectProvider))
-                .subjectTokenType(subjectType)
-                .build();
+    public boolean supports(Class<? extends TokenRequest> clazz) {
+        return clazz == TokenExchangeRequest.class;
     }
 
     @Override

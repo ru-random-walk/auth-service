@@ -6,7 +6,6 @@ import ru.random.walk.authservice.model.dto.TokenResponse;
 import java.util.Map;
 
 public interface OAuth2TokenProvider {
-    boolean supports(String grantType);
-    TokenRequest generateRequest(String clientId, Map<String, Object> body);
+    boolean supports(Class<? extends TokenRequest> clazz);
     TokenResponse handle(TokenRequest tokenRequest);
 }

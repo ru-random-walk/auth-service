@@ -22,28 +22,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class OAuth2RefreshTokenProvider implements OAuth2TokenProvider {
 
-    public static final String REFRESH_TOKEN_GRANT_TYPE = "refresh_token";
-    private static final String REFRESH_TOKEN_KEY = "refresh_token";
     private final RefreshTokenService refreshTokenService;
     private final JwtService jwtService;
 
-    @Override
-    public boolean supports(String grantType) {
-        return REFRESH_TOKEN_GRANT_TYPE.equals(grantType);
-    }
 
     @Override
-    public TokenRequest generateRequest(String clientId, Map<String, Object> body) {
-        if (!body.containsKey(REFRESH_TOKEN_KEY)) {
-            throw new OAuth2BadRequestException("Invalid request");
-        }
-
-        String refreshToken = (String) body.get(REFRESH_TOKEN_KEY);
-
-        return RefreshTokenRequest.builder()
-                .clientId(clientId)
-                .refreshToken(refreshToken)
-                .build();
+    public boolean supports(Class<? extends TokenRequest> clazz) {
+        return clazz == RefreshTokenRequest.class;
     }
 
     @Override
