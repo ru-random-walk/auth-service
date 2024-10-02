@@ -1,5 +1,6 @@
 package ru.random.walk.authservice.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,10 @@ import ru.random.walk.authservice.model.dto.JwkKeyDto;
 import ru.random.walk.authservice.model.dto.JwkKeyResponse;
 import ru.random.walk.authservice.model.dto.OAuthConfigurationResponse;
 import ru.random.walk.authservice.service.JwtService;
+import ru.random.walk.authservice.service.oauth2.providers.OAuth2RefreshTokenProvider;
 import ru.random.walk.authservice.service.oauth2.providers.OAuth2TokenExchangeProvider;
+import ru.random.walk.authservice.service.oauth2.providers.factory.OAuth2RefreshTokenRequestFactory;
+import ru.random.walk.authservice.service.oauth2.providers.factory.OAuth2TokenExchangeRequestFactory;
 
 import java.security.interfaces.RSAPublicKey;
 import java.util.Base64;
@@ -25,13 +29,15 @@ public class OAuth2Controller {
     private final JwtService jwtService;
 
     private final static List<String> SUPPORTED_GRANT_TYPES = List.of(
-            OAuth2TokenExchangeProvider.TOKEN_EXCHANGE_GRANT_TYPE
+            OAuth2TokenExchangeRequestFactory.TOKEN_EXCHANGE_GRANT_TYPE,
+            OAuth2RefreshTokenRequestFactory.REFRESH_TOKEN_GRANT_TYPE
     );
 
     private final static List<String> SUPPORTED_REQUEST_TYPES = List.of(
             "token"
     );
 
+    @Operation(description = "Get authentication server metadata")
     @GetMapping("/.well-known/openid-configuration")
     public ResponseEntity<OAuthConfigurationResponse> getConfiguration() {
         String issuer = serviceProperties.getIssuerUrl();
@@ -46,6 +52,7 @@ public class OAuth2Controller {
         );
     }
 
+    @Operation(description = "URL of the authorization server's JWK Set document")
     @GetMapping("/jwks")
     public ResponseEntity<JwkKeyResponse> getJwks() {
         RSAPublicKey publicKey = jwtService.getRsaPublicKey();

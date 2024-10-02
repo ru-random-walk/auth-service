@@ -1,10 +1,11 @@
 package ru.random.walk.authservice.service.oauth2.providers;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.random.walk.authservice.model.dto.TokenExchangeRequest;
-import ru.random.walk.authservice.model.dto.TokenRequest;
+import ru.random.walk.authservice.model.dto.token.TokenExchangeRequest;
+import ru.random.walk.authservice.model.dto.token.TokenRequest;
 import ru.random.walk.authservice.model.dto.TokenResponse;
 import ru.random.walk.authservice.model.enam.AuthType;
 import ru.random.walk.authservice.model.entity.AuthUser;
@@ -21,41 +22,18 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class OAuth2TokenExchangeProvider implements OAuth2TokenProvider {
 
-    public static final String TOKEN_EXCHANGE_GRANT_TYPE = "urn:ietf:params:oauth:grant-type:token-exchange";
-    private final static String SUBJECT_TOKEN_KEY = "subject_token";
-    private final static String SUBJECT_TOKEN_TYPE_KEY = "subject_token_type";
-    private final static String SUBJECT_TOKEN_PROVIDER_KEY = "subject_token_provider";
     private static final String SUPPORTED_SUBJECT_TOKEN_TYPE = "Access Token";
 
     private final JwtService jwtService;
     private final List<AccessTokenExchanger> accessTokenExchangers;
 
     @Override
-    public boolean supports(String grantType) {
-        return TOKEN_EXCHANGE_GRANT_TYPE.equals(grantType);
+    public boolean supports(Class<? extends TokenRequest> clazz) {
+        return clazz == TokenExchangeRequest.class;
     }
 
     @Override
-    public TokenRequest generateRequest(String clientId, Map<String, Object> body) {
-        if (!body.containsKey(SUBJECT_TOKEN_KEY)
-                || !body.containsKey(SUBJECT_TOKEN_TYPE_KEY)
-                || !body.containsKey(SUBJECT_TOKEN_PROVIDER_KEY)
-        ) {
-            throw new OAuth2BadRequestException("Invalid request");
-        }
-
-        String subjectToken = (String) body.get(SUBJECT_TOKEN_KEY);
-        String subjectType = (String) body.get(SUBJECT_TOKEN_TYPE_KEY);
-        String subjectProvider = (String) body.get(SUBJECT_TOKEN_PROVIDER_KEY);
-        return TokenExchangeRequest.builder()
-                .clientId(clientId)
-                .subjectToken(subjectToken)
-                .subjectProvider(AuthType.getByName(subjectProvider))
-                .subjectTokenType(subjectType)
-                .build();
-    }
-
-    @Override
+    @Transactional
     public TokenResponse handle(TokenRequest tokenRequest) {
         var request = (TokenExchangeRequest) tokenRequest;
         if (!SUPPORTED_SUBJECT_TOKEN_TYPE.equals(request.getSubjectTokenType())) {

@@ -1,4 +1,4 @@
-package ru.random.walk.authservice.model.dto;
+package ru.random.walk.authservice.model.dto.token;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

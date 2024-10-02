@@ -6,5 +6,5 @@ import java.util.List;
 
 @Builder(toBuilder = true)
 public record JwkKeyResponse (
-    List<JwkKeyDto> keys
+        List<JwkKeyDto> keys
 ) {}

@@ -3,7 +3,8 @@ auth:
     google-auth-url: https://www.googleapis.com/oauth2/v3
 
 jwt:
-  expire-time-in-minutes: 15
+  expire-time-in-seconds: 900
+  refresh-token-expire-time-in-days: 7
 
 spring:
   application:
