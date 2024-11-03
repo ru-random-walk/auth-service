@@ -2,17 +2,15 @@ version: "3.9"
 
 services:
   postgres:
-    container_name: auth_db
+    container_name: postgres
     image: postgres:latest
     ports:
       - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
-      - POSTGRES_DB=auth_db
+      - POSTGRES_DB=random_walk_postgres
     volumes:
-      - auth_db_data:/var/lib/postgresql/data
-
+      - db_data:/var/lib/postgresql/data
 volumes:
-  auth_db_data:
-    name: auth_db_data
+  db_data:
