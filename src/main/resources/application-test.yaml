@@ -12,6 +12,8 @@ jwt:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://postgres-postgresql.default.svc.cluster.local:5432/auth_db
+    url: jdbc:postgresql://postgres-postgresql.default.svc.cluster.local:5432/random_walk_postgres
     username: ${AUTH_DB_USERNAME}
     password: ${AUTH_DB_PASSWORD}
+    hikari:
+      schema: auth_db
