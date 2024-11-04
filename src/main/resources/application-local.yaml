@@ -42,8 +42,12 @@ jwt:
     kQIDAQAB
 
 spring:
+  flyway:
+    locations: classpath:db/local_migration, classpath:db/migration
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/random_walk_postgres
     username: postgres
     password: postgres
+    hikari:
+      schema: auth_db
