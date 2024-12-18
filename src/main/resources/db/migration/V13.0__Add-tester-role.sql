@@ -1,0 +1,1 @@
+INSERT INTO ROLE(ID, NAME) values (3, 'TESTER');
