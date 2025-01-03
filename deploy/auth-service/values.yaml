@@ -17,6 +17,8 @@ env:
     value: test
   - name: TZ
     value: Etc/UTC
+  - name: KAFKA_BOOTSTRAP_SERVER
+    value: kafka-cluster.kafka.svc.cluster.local:9092
 
 secrets:
   - name: AUTH_DB_USERNAME
@@ -74,11 +76,11 @@ ingress:
 
 resources:
   limits:
-    cpu: 750m
-    memory: 512Mi
+    cpu: 1000m
+    memory: 1024Mi
   requests:
-    cpu: 1m
-    memory: 128Mi
+    cpu: 10m
+    memory: 512Mi
 
 livenessProbe:
   httpGet:
@@ -93,7 +95,7 @@ readinessProbe:
   httpGet:
     path: /actuator/health
     port: 8080
-  initialDelaySeconds: 30
+  initialDelaySeconds: 45
   periodSeconds: 20
   failureThreshold: 5
   successThreshold: 1

@@ -7,7 +7,10 @@ import ru.random.walk.authservice.model.enam.RoleName;
 import ru.random.walk.authservice.model.entity.AuthUser;
 import ru.random.walk.authservice.repository.RoleRepository;
 import ru.random.walk.authservice.repository.UserRepository;
+import ru.random.walk.authservice.service.KafkaSenderService;
 import ru.random.walk.authservice.service.UserService;
+import ru.random.walk.authservice.service.mapper.AuthUserMapper;
+import ru.random.walk.kafka.EventTopic;
 
 import java.util.EnumSet;
 import java.util.Optional;
@@ -21,6 +24,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final KafkaSenderService kafkaSenderService;
+    private final AuthUserMapper userMapper;
 
     private static final EnumSet<RoleName> DEFAULT_USER_ROLES = EnumSet.of(DEFAULT_USER);
 
@@ -34,6 +39,14 @@ public class UserServiceImpl implements UserService {
         var defaultRoles = roleRepository.findAllByNameIn(DEFAULT_USER_ROLES);
         authUser.getRoles().addAll(defaultRoles);
 
-        return userRepository.save(authUser);
+        var newUser = userRepository.save(authUser);
+        sendNewUserEvent(newUser);
+
+        return newUser;
+    }
+
+    private void sendNewUserEvent(AuthUser newUser) {
+        var eventDto = userMapper.toEventDto(newUser);
+        kafkaSenderService.sendMessage(EventTopic.USER_REGISTRATION, eventDto);
     }
 }

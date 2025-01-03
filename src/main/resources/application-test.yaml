@@ -17,3 +17,5 @@ spring:
     password: ${AUTH_DB_PASSWORD}
     hikari:
       schema: auth_db
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER}
