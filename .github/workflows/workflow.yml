@@ -7,6 +7,8 @@ env:
   APP_NAME: auth-service
   IMAGE_NAME: random-walk-auth-service
   DOCKER_REPO_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  GITHUB_ACTOR: ${{ github.actor }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build-project-and-push-image:
@@ -64,23 +66,26 @@ jobs:
       name: approvers
 
     env:
-      GKE_PROJECT: ${{ secrets.GKE_PROJECT }}
-      GKE_ZONE: ${{ secrets.GKE_ZONE }}
-      GKE_CLUSTER: ${{ secrets.GKE_CLUSTER_NAME }}
+      KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      INTERNAL_IP: ${{ secrets.INTERNAL_IP }}
+      SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+      EXTERNAL_IP: ${{ secrets.EXTERNAL_IP }}
+      EXTERNAL_PORT: ${{ secrets.EXTERNAL_PORT }}
 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Auth to gcloud
-        uses: google-github-actions/auth@v2
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v3
         with:
-          credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
+          version: 'v1.32.1'
 
-      - name: Setup gcloud CLI
-        uses: google-github-actions/setup-gcloud@v2
-        with:
-          version: '>= 363.0.0'
+      - name: Configure kubectl
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
 
       - name: Get image tag
         id: meta
@@ -89,20 +94,24 @@ jobs:
           tags: |
             type=sha,enable=true,priority=100,prefix=,suffix=,format=short
 
-      # Install helm and gcloud component
-      - name: Install components
+      - name: Install helm
         run: |
-          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash 
-          gcloud components install gke-gcloud-auth-plugin
+          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+
+      - name: Establishing SSH tunnel
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          echo "$(ssh-keyscan -p ${EXTERNAL_PORT} ${EXTERNAL_IP})" >> ~/.ssh/known_hosts
+          ssh -fNL 6443:${INTERNAL_IP}:6443 ${SERVER_USERNAME}@${EXTERNAL_IP} -p ${EXTERNAL_PORT}
+          echo "127.0.0.1 kubernetes.default.svc.cluster.local" | sudo tee -a /etc/hosts
 
       - name: Deploy
         run: |
-          gcloud container clusters get-credentials $GKE_CLUSTER \
-            --zone $GKE_ZONE \
-            --project $GKE_PROJECT
           helm upgrade $APP_NAME ./deploy/$APP_NAME/ \
             --set image.tag=$DOCKER_METADATA_OUTPUT_TAGS \
             --set image.repository=$DOCKER_REPO_USERNAME/$IMAGE_NAME \
-            --namespace auth-service \
+            --namespace $APP_NAME \
             --install \
             --wait
