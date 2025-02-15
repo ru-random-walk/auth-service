@@ -6,7 +6,7 @@ import ru.random.walk.authservice.model.dto.GoogleUserInfoDto;
 
 public interface GoogleAuthClient {
 
-    @GetExchange(url = "/userinfo")
+    @GetExchange(url = "/userinfo/v2/me")
     GoogleUserInfoDto getUserInfo(@RequestParam(name = "access_token") String accessToken);
 
 }

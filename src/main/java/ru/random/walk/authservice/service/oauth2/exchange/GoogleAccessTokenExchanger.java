@@ -13,6 +13,7 @@ import ru.random.walk.authservice.service.UserService;
 import ru.random.walk.authservice.service.client.GoogleAuthClient;
 import ru.random.walk.authservice.service.mapper.AuthUserMapper;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -32,15 +33,19 @@ public class GoogleAccessTokenExchanger implements AccessTokenExchanger {
     @Override
     public AuthUser exchange(String subjectToken) {
         var userInfoDto = tryToGetUserInfo(subjectToken);
+        Optional<AuthUser> optionalUser = userService.findByEmail(userInfoDto.email());
 
-        Optional<AuthUser> user = userService.findByEmail(userInfoDto.email());
-        if (user.isPresent()) {
+        if (optionalUser.isPresent()) {
+            var user = optionalUser.get();
 
-            if (user.get().getAuthType() != AuthType.GOOGLE) {
+            if (user.getAuthType() != AuthType.GOOGLE) {
                 throw new OAuth2BadRequestException("User with this email already exists");
             }
-            return user.get();
 
+            if (!Objects.equals(user.getAvatar(), userInfoDto.picture())) {
+                user.setAvatar(userInfoDto.picture());
+            }
+            return user;
         } else {
             var newUser = authUserMapper.fromGoogleDto(userInfoDto);
             return userService.createNewUser(newUser);

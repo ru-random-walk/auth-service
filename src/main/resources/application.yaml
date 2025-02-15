@@ -1,6 +1,6 @@
 auth:
   google:
-    google-auth-url: https://www.googleapis.com/oauth2/v3
+    google-auth-url: https://www.googleapis.com
 
 jwt:
   expire-time-in-seconds: 900
