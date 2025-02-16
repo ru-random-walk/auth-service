@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.random.walk.authservice.model.enam.RoleName;
 import ru.random.walk.authservice.model.entity.AuthUser;
+import ru.random.walk.authservice.model.exception.AuthNotFoundException;
 import ru.random.walk.authservice.repository.RoleRepository;
 import ru.random.walk.authservice.repository.UserRepository;
 import ru.random.walk.authservice.service.KafkaSenderService;
@@ -52,6 +53,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<AuthUser> getUsersPage(List<UUID> ids, Pageable pageable) {
         return userRepository.findAllByIdIn(ids, pageable);
+    }
+
+    @Override
+    public AuthUser findById(UUID id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new AuthNotFoundException("User with id " + id + " does not exist"));
     }
 
     private void sendNewUserEvent(AuthUser newUser) {

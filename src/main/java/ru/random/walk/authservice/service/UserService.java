@@ -12,4 +12,5 @@ public interface UserService {
     Optional<AuthUser> findByEmail(String email);
     AuthUser createNewUser(AuthUser authUser);
     Page<AuthUser> getUsersPage(List<UUID> ids, Pageable pageable);
+    AuthUser findById(UUID id);
 }

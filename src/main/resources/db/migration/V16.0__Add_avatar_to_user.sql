@@ -1,0 +1,1 @@
+ALTER TABLE auth_user add column AVATAR varchar(256)

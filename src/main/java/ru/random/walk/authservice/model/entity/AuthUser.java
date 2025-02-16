@@ -52,6 +52,8 @@ public class AuthUser {
 
     @Column(name = "ENABLED")
     private boolean enabled = true;
+    @Column(name = "AVATAR")
+    private String avatar;
 
     @Column(name = "ACCOUNT_TYPE")
     @Enumerated(EnumType.STRING)

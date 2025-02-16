@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import ru.random.walk.authservice.model.dto.DetailedUserDto;
 import ru.random.walk.authservice.model.dto.UserDto;
 import ru.random.walk.authservice.service.UserService;
 import ru.random.walk.authservice.service.facade.UserFacade;
@@ -25,5 +26,10 @@ public class UserFacadeImpl implements UserFacade {
     public Page<UserDto> getUsers(List<UUID> ids, Pageable pageable) {
         return userService.getUsersPage(ids, pageable)
                 .map(userMapper::toUserDto);
+    }
+
+    @Override
+    public DetailedUserDto getSelfInfo(String name) {
+        return userMapper.toDetailedUserDto(userService.findById(UUID.fromString(name)));
     }
 }

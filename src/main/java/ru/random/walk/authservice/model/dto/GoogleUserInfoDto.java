@@ -14,6 +14,7 @@ public record GoogleUserInfoDto (
     @JsonProperty("family_name")
     String familyName,
 
-    String email
+    String email,
+    String picture
 
 ) {}

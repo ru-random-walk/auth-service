@@ -8,9 +8,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.random.walk.authservice.model.dto.DetailedUserDto;
 import ru.random.walk.authservice.model.dto.UserDto;
 import ru.random.walk.authservice.service.facade.UserFacade;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,5 +29,10 @@ public class UserController {
             @ParameterObject Pageable pageable
     ) {
         return userFacade.getUsers(ids, pageable);
+    }
+
+    @GetMapping("/userinfo/me")
+    public DetailedUserDto getSelfInfo(Principal principal) {
+        return userFacade.getSelfInfo(principal.getName());
     }
 }
