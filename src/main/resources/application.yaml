@@ -3,7 +3,7 @@ auth:
     google-auth-url: https://www.googleapis.com
 
 jwt:
-  expire-time-in-seconds: 900
+  expire-time-in-seconds: 3600
   refresh-token-expire-time-in-days: 7
 
 spring:
