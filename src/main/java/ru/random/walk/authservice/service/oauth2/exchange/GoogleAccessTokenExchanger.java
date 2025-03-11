@@ -33,23 +33,25 @@ public class GoogleAccessTokenExchanger implements AccessTokenExchanger {
     @Override
     public AuthUser exchange(String subjectToken) {
         var userInfoDto = tryToGetUserInfo(subjectToken);
-        Optional<AuthUser> optionalUser = userService.findByEmail(userInfoDto.email());
+        return userService.findByEmail(userInfoDto.email())
+                .map(user -> useExistingUser(user, userInfoDto))
+                .orElseGet(() -> createNewUser(userInfoDto));
+    }
 
-        if (optionalUser.isPresent()) {
-            var user = optionalUser.get();
-
-            if (user.getAuthType() != AuthType.GOOGLE) {
-                throw new OAuth2BadRequestException("User with this email already exists");
-            }
-
-            if (!Objects.equals(user.getAvatar(), userInfoDto.picture())) {
-                user.setAvatar(userInfoDto.picture());
-            }
-            return user;
-        } else {
-            var newUser = authUserMapper.fromGoogleDto(userInfoDto);
-            return userService.createNewUser(newUser);
+    private AuthUser useExistingUser(AuthUser user, GoogleUserInfoDto userInfoDto) {
+        if (user.getAuthType() != AuthType.GOOGLE) {
+            throw new OAuth2BadRequestException("User with this email already exists");
         }
+
+        if (!Objects.equals(user.getAvatar(), userInfoDto.picture())) {
+            user.setAvatar(userInfoDto.picture());
+        }
+        return user;
+    }
+
+    private AuthUser createNewUser(GoogleUserInfoDto userInfoDto) {
+        var newUser = authUserMapper.fromGoogleDto(userInfoDto);
+        return userService.createNewUser(newUser);
     }
 
     private GoogleUserInfoDto tryToGetUserInfo(String token) {

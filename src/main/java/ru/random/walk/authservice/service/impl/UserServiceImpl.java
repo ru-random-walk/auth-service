@@ -5,12 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.random.walk.authservice.model.enam.RoleName;
 import ru.random.walk.authservice.model.entity.AuthUser;
 import ru.random.walk.authservice.model.exception.AuthNotFoundException;
 import ru.random.walk.authservice.repository.RoleRepository;
 import ru.random.walk.authservice.repository.UserRepository;
-import ru.random.walk.authservice.service.KafkaSenderService;
+import ru.random.walk.authservice.service.OutboxSenderService;
 import ru.random.walk.authservice.service.UserService;
 import ru.random.walk.authservice.service.mapper.AuthUserMapper;
 import ru.random.walk.kafka.EventTopic;
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final KafkaSenderService kafkaSenderService;
+    private final OutboxSenderService outboxSenderService;
     private final AuthUserMapper userMapper;
 
     private static final EnumSet<RoleName> DEFAULT_USER_ROLES = EnumSet.of(DEFAULT_USER);
@@ -40,6 +41,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public AuthUser createNewUser(AuthUser authUser) {
         var defaultRoles = roleRepository.findAllByNameIn(DEFAULT_USER_ROLES);
         authUser.getRoles().addAll(defaultRoles);
@@ -63,6 +65,6 @@ public class UserServiceImpl implements UserService {
 
     private void sendNewUserEvent(AuthUser newUser) {
         var eventDto = userMapper.toEventDto(newUser);
-        kafkaSenderService.sendMessage(EventTopic.USER_REGISTRATION, eventDto);
+        outboxSenderService.sendMessageByOutbox(EventTopic.USER_REGISTRATION, eventDto);
     }
 }
