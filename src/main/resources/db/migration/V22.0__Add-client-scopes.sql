@@ -1,0 +1,6 @@
+INSERT INTO oauth_scope(id, name) VALUES (1, 'MOBILE_CLIENT_SCOPE');
+INSERT INTO oauth_scope(id, name) VALUES (2, 'AUTH_API_CLIENT_SCOPE');
+INSERT INTO oauth_scope(id, name) VALUES (3, 'MATCHER_API_CLIENT_SCOPE');
+INSERT INTO oauth_scope(id, name) VALUES (4, 'CLUB_API_CLIENT_SCOPE');
+INSERT INTO oauth_scope(id, name) VALUES (5, 'CHAT_API_CLIENT_SCOPE');
+INSERT INTO oauth_scope(id, name) VALUES (6, 'TWITTER_API_CLIENT_SCOPE');
