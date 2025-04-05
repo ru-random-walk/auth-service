@@ -41,7 +41,7 @@ public class OAuthClient {
 
     public List<GrantedAuthority> getAuthorities() {
         return scopes.stream()
-                .map(scope -> new SimpleGrantedAuthority(scope.getName()))
+                .map(scope -> new SimpleGrantedAuthority(scope.getName().name()))
                 .collect(Collectors.toList());
     }
 }

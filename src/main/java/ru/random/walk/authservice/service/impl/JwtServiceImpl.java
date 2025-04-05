@@ -2,13 +2,17 @@ package ru.random.walk.authservice.service.impl;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.random.walk.authservice.config.AuthServiceProperties;
 import ru.random.walk.authservice.config.security.jwt.JwtProperties;
+import ru.random.walk.authservice.model.dto.token.ClientCredentialsTokenRequest;
 import ru.random.walk.authservice.model.dto.token.TokenRequest;
 import ru.random.walk.authservice.model.dto.TokenResponse;
+import ru.random.walk.authservice.model.enam.ClientScope;
+import ru.random.walk.authservice.model.enam.RoleName;
 import ru.random.walk.authservice.model.entity.AuthUser;
 import ru.random.walk.authservice.model.entity.Role;
 import ru.random.walk.authservice.service.JwtService;
@@ -23,6 +27,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -41,7 +46,7 @@ public class JwtServiceImpl implements JwtService {
                 .setIssuer(authServiceProperties.getIssuerUrl())
                 .signWith(getPrivateKey(), SignatureAlgorithm.RS256)
                 .claim("client_id", tokenRequest.getClientId())
-                .claim("authorities", user.getRoles().stream().map(Role::getName).toList())
+                .claim("authorities", getAuthorities(tokenRequest, user))
                 .setExpiration(
                         Date.from(
                                 LocalDateTime.now()
@@ -50,17 +55,45 @@ public class JwtServiceImpl implements JwtService {
                                         .toInstant()
                         )
                 )
-                .setSubject(user.getId().toString())
+                .setSubject(getSubject(tokenRequest, user))
                 .compact();
-
-        var refreshToken = refreshTokenService.refreshTokenForUser(user);
 
         return TokenResponse.builder()
                 .tokenType("Bearer")
                 .accessToken(accessToken)
-                .refreshToken(refreshToken.getToken().toString())
+                .refreshToken(getRefreshToken(user))
                 .expiresIn(jwtProperties.getExpireTimeInSeconds())
                 .build();
+    }
+
+    private List<String> getAuthorities(TokenRequest tokenRequest, AuthUser user) {
+        if (tokenRequest instanceof ClientCredentialsTokenRequest clientCredentialsRequest) {
+            return clientCredentialsRequest.getScopes().stream()
+                    .map(ClientScope::name)
+                    .toList();
+        } else {
+            return user.getRoles().stream()
+                    .map(Role::getName)
+                    .map(RoleName::name)
+                    .toList();
+        }
+    }
+
+    private String getSubject(TokenRequest tokenRequest, AuthUser user) {
+        if (tokenRequest instanceof ClientCredentialsTokenRequest clientCredentialsRequest) {
+            return clientCredentialsRequest.getClientId();
+        } else {
+            return user.getId().toString();
+        }
+    }
+
+    @Nullable
+    private String getRefreshToken(AuthUser user) {
+        if (user == null) {
+            return null;
+        }
+        var refreshToken = refreshTokenService.refreshTokenForUser(user);
+        return refreshToken.getToken().toString();
     }
 
     private PrivateKey getPrivateKey() {
