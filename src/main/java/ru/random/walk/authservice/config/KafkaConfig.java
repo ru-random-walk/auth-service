@@ -11,8 +11,7 @@ import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
-import org.springframework.kafka.support.serializer.JsonSerializer;
-import ru.random.walk.kafka.EventTopic;
+import ru.random.walk.topic.EventTopic;
 
 import java.util.HashMap;
 import java.util.Map;
