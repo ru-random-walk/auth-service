@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ваш одноразовый пароль</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #00cc66; /* Ярко-зеленый */
+            color: white;
+            border-radius: 8px 8px 0 0;
+            margin: -20px -20px 20px -20px;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .content {
+            padding: 0 20px;
+        }
+        .otp-code {
+            font-size: 32px;
+            font-weight: bold;
+            text-align: center;
+            letter-spacing: 5px;
+            margin: 30px 0;
+            color: #00cc66; /* Ярко-зеленый */
+            padding: 15px;
+            background-color: #f0fff0;
+            border-radius: 5px;
+            border: 1px dashed #00cc66;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eeeeee;
+            font-size: 12px;
+            color: #777777;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #00cc66; /* Ярко-зеленый */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .warning {
+            background-color: #fff9e6;
+            padding: 15px;
+            border-left: 4px solid #ffcc00;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="logo">RANDOM WALK</div>
+    </div>
+
+    <div class="content">
+        <h2>Здравствуйте!</h2>
+        <p>Вы запросили одноразовый пароль для доступа к вашему аккаунту. Вот ваш код:</p>
+
+        <div class="otp-code" th:text="${otpCode}">One time Code</div>
+
+        <p th:text="'Этот код будет действителен в течение ' + ${codeTtl} + ' минут. Не сообщайте его никому.'"> Этот код будет действителен в течение 10 минут. Не сообщайте его никому. </p>
+
+        <div class="warning">
+            <strong>Важно:</strong> Если вы не запрашивали этот код, пожалуйста, немедленно свяжитесь с нашей службой поддержки.
+        </div>
+
+        <p>Если у вас возникли вопросы, вы можете обратиться в нашу службу поддержки.</p>
+
+        <p>С уважением,<br>Команда Random Walk</p>
+    </div>
+
+    <div class="footer">
+        <p>Вы получили это письмо, потому что запросили одноразовый пароль на нашем сайте.</p>
+    </div>
+</div>
+</body>
+</html>

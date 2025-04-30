@@ -5,8 +5,11 @@ import org.mapstruct.Mapping;
 import ru.random.walk.authservice.model.dto.DetailedUserDto;
 import ru.random.walk.authservice.model.dto.GoogleUserInfoDto;
 import ru.random.walk.authservice.model.dto.UserDto;
+import ru.random.walk.authservice.model.enam.AuthType;
 import ru.random.walk.authservice.model.entity.AuthUser;
 import ru.random.walk.dto.RegisteredUserInfoEvent;
+
+import java.util.UUID;
 
 @Mapper(componentModel = "spring")
 public interface AuthUserMapper {
@@ -22,4 +25,13 @@ public interface AuthUserMapper {
     UserDto toUserDto(AuthUser user);
 
     DetailedUserDto toDetailedUserDto(AuthUser user);
+
+    default AuthUser createCustomUser(String email, AuthType authType) {
+        var user = new AuthUser();
+        user.setEmail(email);
+        user.setAuthType(authType);
+        user.setUsername(email);
+        user.setFullName("User" + UUID.randomUUID());
+        return user;
+    }
 }

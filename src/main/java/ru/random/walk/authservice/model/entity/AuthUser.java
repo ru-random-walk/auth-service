@@ -47,11 +47,9 @@ public class AuthUser {
     @Column(name = "EMAIL")
     private String email;
 
-    @Column(name = "PASSWORD")
-    private String password;
-
     @Column(name = "ENABLED")
     private boolean enabled = true;
+
     @Column(name = "AVATAR")
     private String avatar;
 

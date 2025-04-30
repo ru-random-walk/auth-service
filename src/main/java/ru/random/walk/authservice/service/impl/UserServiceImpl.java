@@ -14,7 +14,7 @@ import ru.random.walk.authservice.repository.UserRepository;
 import ru.random.walk.authservice.service.OutboxSenderService;
 import ru.random.walk.authservice.service.UserService;
 import ru.random.walk.authservice.service.mapper.AuthUserMapper;
-import ru.random.walk.kafka.EventTopic;
+import ru.random.walk.topic.EventTopic;
 
 import java.util.EnumSet;
 import java.util.List;

@@ -52,7 +52,7 @@ public class SecurityConfig {
             HttpSecurity http
     ) throws Exception {
         return http
-                .securityMatcher("/token")
+                .securityMatcher("/token", "/email/otp")
                 .sessionManagement(sessionManagement ->
                         sessionManagement
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
