@@ -1,4 +1,4 @@
-package ru.random.walk.authservice.model.dto;
+package ru.random.walk.authservice.model.dto.clients;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;

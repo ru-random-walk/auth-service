@@ -2,7 +2,7 @@ package ru.random.walk.authservice.service.client;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.service.annotation.GetExchange;
-import ru.random.walk.authservice.model.dto.GoogleUserInfoDto;
+import ru.random.walk.authservice.model.dto.clients.GoogleUserInfoDto;
 
 public interface GoogleAuthClient {
 
