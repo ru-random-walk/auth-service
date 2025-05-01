@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import ru.random.walk.authservice.model.dto.EmailAuthDto;
 import ru.random.walk.authservice.model.dto.TokenResponse;
 import ru.random.walk.authservice.model.enam.AuthType;
-import ru.random.walk.authservice.model.exception.OAuth2AuthorizationException;
-import ru.random.walk.authservice.model.exception.OAuth2BadRequestException;
+import ru.random.walk.authservice.model.exception.AuthAuthorizationException;
+import ru.random.walk.authservice.model.exception.AuthBadRequestException;
 import ru.random.walk.authservice.service.OneTimePasswordService;
 import ru.random.walk.authservice.service.UserService;
 import ru.random.walk.authservice.service.facade.TokenFacade;
@@ -31,7 +31,7 @@ public class TokenFacadeImpl implements TokenFacade {
     @Override
     public TokenResponse postForToken(Map<String, Object> body, String clientId) {
         if (!body.containsKey(GRANT_TYPE_KEY)) {
-            throw new OAuth2BadRequestException("Unsupported grant type");
+            throw new AuthBadRequestException("Unsupported grant type");
         }
         String grantType = (String) body.get(GRANT_TYPE_KEY);
 
@@ -39,20 +39,20 @@ public class TokenFacadeImpl implements TokenFacade {
                 .filter(factory -> factory.supports(grantType))
                 .map(factory -> factory.generateRequest(clientId, body))
                 .findFirst()
-                .orElseThrow(() -> new OAuth2BadRequestException("Unsupported grant type"));
+                .orElseThrow(() -> new AuthBadRequestException("Unsupported grant type"));
 
         return tokenProviders.stream()
                 .filter(provider -> provider.supports(request.getClass()))
                 .map(provider -> provider.handle(request))
                 .findFirst()
-                .orElseThrow(() -> new OAuth2BadRequestException("Unsupported grant type"));
+                .orElseThrow(() -> new AuthBadRequestException("Unsupported grant type"));
     }
 
     @Override
     public void issueOneTimePassword(EmailAuthDto dto) {
         var user = userService.findByEmail(dto.email());
         if (user.isPresent() && user.get().getAuthType() != AuthType.PASSWORD) {
-            throw new OAuth2AuthorizationException("Access denied");
+            throw new AuthAuthorizationException("Access denied");
         }
 
         otpService.issueByEmail(dto.email());

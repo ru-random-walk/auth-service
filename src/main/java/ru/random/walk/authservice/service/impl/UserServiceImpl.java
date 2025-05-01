@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.random.walk.authservice.model.dto.ChangeUserInfoDto;
 import ru.random.walk.authservice.model.enam.RoleName;
 import ru.random.walk.authservice.model.entity.AuthUser;
 import ru.random.walk.authservice.model.exception.AuthNotFoundException;
@@ -61,6 +62,14 @@ public class UserServiceImpl implements UserService {
     public AuthUser findById(UUID id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new AuthNotFoundException("User with id " + id + " does not exist"));
+    }
+
+    @Override
+    public AuthUser changeUser(UUID id, ChangeUserInfoDto changeDto) {
+        AuthUser user = findById(id);
+        user.setFullName(changeDto.fullName());
+        user.setDescription(changeDto.aboutMe());
+        return userRepository.save(user);
     }
 
     private void sendNewUserEvent(AuthUser newUser) {

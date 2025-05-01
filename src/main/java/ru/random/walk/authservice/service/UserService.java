@@ -2,6 +2,7 @@ package ru.random.walk.authservice.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import ru.random.walk.authservice.model.dto.ChangeUserInfoDto;
 import ru.random.walk.authservice.model.entity.AuthUser;
 
 import java.util.List;
@@ -13,4 +14,5 @@ public interface UserService {
     AuthUser createNewUser(AuthUser authUser);
     Page<AuthUser> getUsersPage(List<UUID> ids, Pageable pageable);
     AuthUser findById(UUID id);
+    AuthUser changeUser(UUID id, ChangeUserInfoDto changeDto);
 }

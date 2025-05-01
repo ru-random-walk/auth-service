@@ -7,24 +7,24 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.random.walk.authservice.model.dto.ApiErrorDto;
-import ru.random.walk.authservice.model.exception.OAuth2BadRequestException;
-import ru.random.walk.authservice.model.exception.OAuth2AuthorizationException;
+import ru.random.walk.authservice.model.exception.AuthBadRequestException;
+import ru.random.walk.authservice.model.exception.AuthAuthorizationException;
 
 @RestControllerAdvice
 @Slf4j
 public class ControllerAdvice {
 
-    @ExceptionHandler({OAuth2BadRequestException.class})
+    @ExceptionHandler({AuthBadRequestException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ApiErrorDto> exceptionHandler(OAuth2BadRequestException e) {
+    public ResponseEntity<ApiErrorDto> exceptionHandler(AuthBadRequestException e) {
         log.warn("Oauth2 exception", e);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ApiErrorDto(e.getMessage()));
     }
 
-    @ExceptionHandler({OAuth2AuthorizationException.class})
+    @ExceptionHandler({AuthAuthorizationException.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResponseEntity<ApiErrorDto> exceptionHandler(OAuth2AuthorizationException e) {
+    public ResponseEntity<ApiErrorDto> exceptionHandler(AuthAuthorizationException e) {
         log.warn("Oauth2 exception", e);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new ApiErrorDto(e.getMessage()));

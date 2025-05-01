@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.random.walk.authservice.model.dto.token.RefreshTokenRequest;
 import ru.random.walk.authservice.model.dto.token.TokenRequest;
-import ru.random.walk.authservice.model.exception.OAuth2BadRequestException;
+import ru.random.walk.authservice.model.exception.AuthBadRequestException;
 
 import java.util.Map;
 
@@ -25,7 +25,7 @@ public class OAuth2RefreshTokenRequestFactory implements OAuth2TokenRequestFacto
     @Override
     public TokenRequest generateRequest(String clientId, Map<String, Object> body) {
         if (!body.containsKey(REFRESH_TOKEN_KEY)) {
-            throw new OAuth2BadRequestException("Invalid request");
+            throw new AuthBadRequestException("Invalid request");
         }
 
         String refreshToken = (String) body.get(REFRESH_TOKEN_KEY);

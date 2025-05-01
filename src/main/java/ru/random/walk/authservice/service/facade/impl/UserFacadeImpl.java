@@ -1,12 +1,15 @@
 package ru.random.walk.authservice.service.facade.impl;
 
+import com.google.common.base.Strings;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import ru.random.walk.authservice.model.dto.ChangeUserInfoDto;
 import ru.random.walk.authservice.model.dto.DetailedUserDto;
 import ru.random.walk.authservice.model.dto.UserDto;
+import ru.random.walk.authservice.model.exception.AuthBadRequestException;
 import ru.random.walk.authservice.service.UserService;
 import ru.random.walk.authservice.service.facade.UserFacade;
 import ru.random.walk.authservice.service.mapper.AuthUserMapper;
@@ -31,5 +34,14 @@ public class UserFacadeImpl implements UserFacade {
     @Override
     public DetailedUserDto getSelfInfo(String name) {
         return userMapper.toDetailedUserDto(userService.findById(UUID.fromString(name)));
+    }
+
+    @Override
+    public DetailedUserDto changeUserInfo(String name, ChangeUserInfoDto dto) {
+        if (Strings.isNullOrEmpty(dto.fullName())) {
+            throw new AuthBadRequestException("Full name cannot be empty");
+        }
+        UUID id = UUID.fromString(name);
+        return userMapper.toDetailedUserDto(userService.changeUser(id, dto));
     }
 }

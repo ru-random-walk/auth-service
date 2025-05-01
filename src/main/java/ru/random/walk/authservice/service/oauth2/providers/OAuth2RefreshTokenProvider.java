@@ -8,13 +8,11 @@ import ru.random.walk.authservice.model.dto.token.RefreshTokenRequest;
 import ru.random.walk.authservice.model.dto.token.TokenRequest;
 import ru.random.walk.authservice.model.dto.TokenResponse;
 import ru.random.walk.authservice.model.entity.RefreshTokenEntity;
-import ru.random.walk.authservice.model.exception.OAuth2AuthorizationException;
-import ru.random.walk.authservice.model.exception.OAuth2BadRequestException;
+import ru.random.walk.authservice.model.exception.AuthAuthorizationException;
 import ru.random.walk.authservice.service.JwtService;
 import ru.random.walk.authservice.service.RefreshTokenService;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 
 @Service
@@ -44,7 +42,7 @@ public class OAuth2RefreshTokenProvider implements OAuth2TokenProvider {
 
     private void checkNotExpired(RefreshTokenEntity token) {
         if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
-            throw new OAuth2AuthorizationException("Token expired");
+            throw new AuthAuthorizationException("Token expired");
         }
     }
 }

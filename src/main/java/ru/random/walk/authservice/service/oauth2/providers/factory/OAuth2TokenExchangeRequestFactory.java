@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.random.walk.authservice.model.dto.token.TokenExchangeRequest;
 import ru.random.walk.authservice.model.dto.token.TokenRequest;
 import ru.random.walk.authservice.model.enam.AuthType;
-import ru.random.walk.authservice.model.exception.OAuth2BadRequestException;
+import ru.random.walk.authservice.model.exception.AuthBadRequestException;
 
 import java.util.Map;
 
@@ -31,7 +31,7 @@ public class OAuth2TokenExchangeRequestFactory implements OAuth2TokenRequestFact
                 || !body.containsKey(SUBJECT_TOKEN_TYPE_KEY)
                 || !body.containsKey(SUBJECT_TOKEN_PROVIDER_KEY)
         ) {
-            throw new OAuth2BadRequestException("Invalid request");
+            throw new AuthBadRequestException("Invalid request");
         }
 
         String subjectToken = (String) body.get(SUBJECT_TOKEN_KEY);
