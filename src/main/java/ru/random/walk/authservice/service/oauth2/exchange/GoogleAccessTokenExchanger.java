@@ -7,14 +7,13 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import ru.random.walk.authservice.model.dto.GoogleUserInfoDto;
 import ru.random.walk.authservice.model.enam.AuthType;
 import ru.random.walk.authservice.model.entity.AuthUser;
-import ru.random.walk.authservice.model.exception.OAuth2BadRequestException;
-import ru.random.walk.authservice.model.exception.OAuth2AuthorizationException;
+import ru.random.walk.authservice.model.exception.AuthBadRequestException;
+import ru.random.walk.authservice.model.exception.AuthAuthorizationException;
 import ru.random.walk.authservice.service.UserService;
 import ru.random.walk.authservice.service.client.GoogleAuthClient;
 import ru.random.walk.authservice.service.mapper.AuthUserMapper;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +39,7 @@ public class GoogleAccessTokenExchanger implements AccessTokenExchanger {
 
     private AuthUser useExistingUser(AuthUser user, GoogleUserInfoDto userInfoDto) {
         if (user.getAuthType() != AuthType.GOOGLE) {
-            throw new OAuth2BadRequestException("User with this email already exists");
+            throw new AuthBadRequestException("User with this email already exists");
         }
 
         if (!Objects.equals(user.getAvatar(), userInfoDto.picture())) {
@@ -61,7 +60,7 @@ public class GoogleAccessTokenExchanger implements AccessTokenExchanger {
             log.error("Google threw exception", exception);
 
             if (exception.getStatusCode().value() == 401) {
-                throw new OAuth2AuthorizationException("Google respond with UNAUTHORIZED error code");
+                throw new AuthAuthorizationException("Google respond with UNAUTHORIZED error code");
             }
 
             throw exception;

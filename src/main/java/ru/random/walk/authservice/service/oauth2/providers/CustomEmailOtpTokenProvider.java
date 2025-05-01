@@ -9,7 +9,7 @@ import ru.random.walk.authservice.model.dto.token.EmailOtpTokenRequest;
 import ru.random.walk.authservice.model.dto.token.TokenRequest;
 import ru.random.walk.authservice.model.enam.AuthType;
 import ru.random.walk.authservice.model.entity.AuthUser;
-import ru.random.walk.authservice.model.exception.OAuth2AuthorizationException;
+import ru.random.walk.authservice.model.exception.AuthAuthorizationException;
 import ru.random.walk.authservice.service.JwtService;
 import ru.random.walk.authservice.service.OneTimePasswordService;
 import ru.random.walk.authservice.service.UserService;
@@ -37,7 +37,7 @@ public class CustomEmailOtpTokenProvider implements OAuth2TokenProvider {
         String email = request.getEmail();
         String password = request.getOneTimePassword();
         if (!oneTimePasswordService.isValidPassword(email, password)) {
-            throw new OAuth2AuthorizationException("Access denied");
+            throw new AuthAuthorizationException("Access denied");
         }
 
         AuthUser authUser = userService.findByEmail(email)

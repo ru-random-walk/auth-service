@@ -2,7 +2,7 @@ package ru.random.walk.authservice.model.enam;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import ru.random.walk.authservice.model.exception.OAuth2BadRequestException;
+import ru.random.walk.authservice.model.exception.AuthBadRequestException;
 
 import java.util.Arrays;
 
@@ -19,6 +19,6 @@ public enum AuthType {
         return Arrays.stream(AuthType.values())
                 .filter(type -> type.name.equals(name))
                 .findFirst()
-                .orElseThrow(() -> new OAuth2BadRequestException("There is no provider type with name: " + name));
+                .orElseThrow(() -> new AuthBadRequestException("There is no provider type with name: " + name));
     }
 }

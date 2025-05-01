@@ -57,6 +57,9 @@ public class AuthUser {
     @Enumerated(EnumType.STRING)
     private AuthType authType;
 
+    @Column(name = "DESCRIPTION")
+    private String description;
+
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name = "USER_ROLE",

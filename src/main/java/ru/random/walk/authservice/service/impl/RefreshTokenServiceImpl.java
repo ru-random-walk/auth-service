@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.random.walk.authservice.config.security.jwt.JwtProperties;
 import ru.random.walk.authservice.model.entity.AuthUser;
 import ru.random.walk.authservice.model.entity.RefreshTokenEntity;
-import ru.random.walk.authservice.model.exception.OAuth2AuthorizationException;
+import ru.random.walk.authservice.model.exception.AuthAuthorizationException;
 import ru.random.walk.authservice.repository.RefreshTokenRepository;
 import ru.random.walk.authservice.service.RefreshTokenService;
 
@@ -26,7 +26,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Override
     public RefreshTokenEntity getRefreshToken(String token) {
         return refreshTokenRepository.findByToken(UUID.fromString(token))
-                .orElseThrow(() -> new OAuth2AuthorizationException("Invalid token"));
+                .orElseThrow(() -> new AuthAuthorizationException("Invalid token"));
     }
 
     @Override

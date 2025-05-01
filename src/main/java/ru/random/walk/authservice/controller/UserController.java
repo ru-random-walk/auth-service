@@ -7,8 +7,11 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.random.walk.authservice.model.dto.ChangeUserInfoDto;
 import ru.random.walk.authservice.model.dto.DetailedUserDto;
 import ru.random.walk.authservice.model.dto.UserDto;
 import ru.random.walk.authservice.service.facade.UserFacade;
@@ -37,5 +40,12 @@ public class UserController {
     @GetMapping("/userinfo/me")
     public DetailedUserDto getSelfInfo(Principal principal) {
         return userFacade.getSelfInfo(principal.getName());
+    }
+
+    @Operation(summary = "Change current user's information")
+    @PutMapping("/userinfo/change")
+    public DetailedUserDto changeSelfInfo(@RequestBody ChangeUserInfoDto dto, Principal principal) {
+        log.info("Changing information about user {}, dto: {}", principal.getName(), dto);
+        return userFacade.changeUserInfo(principal.getName(), dto);
     }
 }

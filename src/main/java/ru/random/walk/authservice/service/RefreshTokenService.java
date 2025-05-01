@@ -2,6 +2,7 @@ package ru.random.walk.authservice.service;
 
 import ru.random.walk.authservice.model.entity.AuthUser;
 import ru.random.walk.authservice.model.entity.RefreshTokenEntity;
+import ru.random.walk.authservice.model.exception.AuthAuthorizationException;
 
 public interface RefreshTokenService {
     /**
@@ -9,7 +10,7 @@ public interface RefreshTokenService {
      *
      * @param token token name
      * @return existing RefreshTokenEntity
-     * @throws ru.random.walk.authservice.model.exception.OAuth2AuthorizationException if token does not exist
+     * @throws AuthAuthorizationException if token does not exist
      */
     RefreshTokenEntity getRefreshToken(String token);
 
