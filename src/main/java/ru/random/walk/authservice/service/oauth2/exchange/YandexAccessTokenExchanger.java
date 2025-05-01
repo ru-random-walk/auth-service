@@ -64,7 +64,7 @@ public class YandexAccessTokenExchanger implements AccessTokenExchanger {
     }
 
     private void refreshAvatar(AuthUser user, YandexUserInfoDto userInfoDto) {
-        if (Objects.nonNull(userInfoDto.isAvatarEmpty()) && !userInfoDto.isAvatarEmpty()) {
+        if (Boolean.FALSE.equals(userInfoDto.isAvatarEmpty())) {
             String avatarUrl = getAvatarUrl(userInfoDto.avatarId());
             if (!Objects.equals(user.getAvatar(), avatarUrl)) {
                 user.setAvatar(avatarUrl);
