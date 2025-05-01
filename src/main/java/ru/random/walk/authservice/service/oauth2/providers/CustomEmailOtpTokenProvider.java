@@ -40,11 +40,17 @@ public class CustomEmailOtpTokenProvider implements OAuth2TokenProvider {
             throw new OAuth2AuthorizationException("Access denied");
         }
 
-        AuthUser user = userMapper.createCustomUser(email, AuthType.PASSWORD);
-        userService.createNewUser(user);
+        AuthUser authUser = userService.findByEmail(email)
+                .filter(user -> user.getAuthType() == AuthType.PASSWORD)
+                .orElseGet(() -> createUser(email));
         oneTimePasswordService.deletePasswordByEmail(email);
 
-        return jwtService.generateToken(tokenRequest, user);
+        return jwtService.generateToken(tokenRequest, authUser);
+    }
+
+    private AuthUser createUser(String email) {
+        AuthUser user = userMapper.createCustomUser(email, AuthType.PASSWORD);
+        return userService.createNewUser(user);
     }
 
 }
