@@ -11,9 +11,15 @@ public class AuthServiceProperties {
 
     private String issuerUrl;
     private Google google;
+    private Yandex yandex;
 
     @Data
     public static class Google {
         private String googleAuthUrl;
+    }
+
+    @Data
+    public static class Yandex {
+        private String yandexAuthUrl;
     }
 }

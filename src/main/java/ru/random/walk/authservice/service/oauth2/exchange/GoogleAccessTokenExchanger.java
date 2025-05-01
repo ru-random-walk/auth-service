@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
-import ru.random.walk.authservice.model.dto.GoogleUserInfoDto;
+import ru.random.walk.authservice.model.dto.clients.GoogleUserInfoDto;
 import ru.random.walk.authservice.model.enam.AuthType;
 import ru.random.walk.authservice.model.entity.AuthUser;
 import ru.random.walk.authservice.model.exception.AuthBadRequestException;
