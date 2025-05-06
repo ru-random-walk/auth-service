@@ -45,4 +45,19 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
         return refreshTokenRepository.save(refreshToken);
     }
+
+    @Override
+    @Transactional
+    public void removeTokenForUser(UUID userId) {
+        var optionalRefreshToken = refreshTokenRepository.findById(userId);
+
+        if (optionalRefreshToken.isEmpty()) {
+            log.info("No refresh token exists for user {}", userId);
+            return;
+        }
+
+        var refreshToken = optionalRefreshToken.get();
+        refreshTokenRepository.delete(refreshToken);
+        log.info("Refresh token is deleted for user {}", userId);
+    }
 }

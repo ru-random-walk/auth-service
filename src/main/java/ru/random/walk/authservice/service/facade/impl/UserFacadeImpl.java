@@ -10,6 +10,7 @@ import ru.random.walk.authservice.model.dto.ChangeUserInfoDto;
 import ru.random.walk.authservice.model.dto.DetailedUserDto;
 import ru.random.walk.authservice.model.dto.UserDto;
 import ru.random.walk.authservice.model.exception.AuthBadRequestException;
+import ru.random.walk.authservice.service.RefreshTokenService;
 import ru.random.walk.authservice.service.UserService;
 import ru.random.walk.authservice.service.facade.UserFacade;
 import ru.random.walk.authservice.service.mapper.AuthUserMapper;
@@ -24,6 +25,7 @@ public class UserFacadeImpl implements UserFacade {
 
     private final UserService userService;
     private final AuthUserMapper userMapper;
+    private final RefreshTokenService refreshTokenService;
 
     @Override
     public Page<UserDto> getUsers(List<UUID> ids, Pageable pageable) {
@@ -43,5 +45,11 @@ public class UserFacadeImpl implements UserFacade {
         }
         UUID id = UUID.fromString(name);
         return userMapper.toDetailedUserDto(userService.changeUser(id, dto));
+    }
+
+    @Override
+    public void logoutUser(String name) {
+        UUID userId = UUID.fromString(name);
+        refreshTokenService.removeTokenForUser(userId);
     }
 }

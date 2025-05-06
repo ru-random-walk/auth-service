@@ -4,6 +4,8 @@ import ru.random.walk.authservice.model.entity.AuthUser;
 import ru.random.walk.authservice.model.entity.RefreshTokenEntity;
 import ru.random.walk.authservice.model.exception.AuthAuthorizationException;
 
+import java.util.UUID;
+
 public interface RefreshTokenService {
     /**
      * Find existing token info by token name
@@ -21,4 +23,10 @@ public interface RefreshTokenService {
      * @return a new RefreshTokenEntity
      */
     RefreshTokenEntity refreshTokenForUser(AuthUser authUser);
+
+    /**
+     * Removes refresh token if it exists
+     * @param userId user id
+     */
+    void removeTokenForUser(UUID userId);
 }

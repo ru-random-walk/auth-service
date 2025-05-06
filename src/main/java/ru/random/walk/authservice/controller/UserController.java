@@ -7,6 +7,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,5 +48,12 @@ public class UserController {
     public DetailedUserDto changeSelfInfo(@RequestBody ChangeUserInfoDto dto, Principal principal) {
         log.info("Changing information about user {}, dto: {}", principal.getName(), dto);
         return userFacade.changeUserInfo(principal.getName(), dto);
+    }
+
+    @Operation(summary = "Logout and remove user's refresh token")
+    @PostMapping("/logout")
+    public void logOut(Principal principal) {
+        log.info("Logging out user {}", principal.getName());
+        userFacade.logoutUser(principal.getName());
     }
 }
