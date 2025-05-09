@@ -15,4 +15,6 @@ public interface UserFacade {
     DetailedUserDto getSelfInfo(String name);
 
     DetailedUserDto changeUserInfo(String name, ChangeUserInfoDto dto);
+
+    void logoutUser(String name);
 }
