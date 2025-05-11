@@ -14,6 +14,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,7 +32,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
+@Setter()
 @Table(name = "AUTH_USER")
 public class AuthUser {
     @Id
@@ -51,7 +52,11 @@ public class AuthUser {
     private boolean enabled = true;
 
     @Column(name = "AVATAR")
-    private String avatar;
+    private String externalAvatarUrl;
+
+    @Setter(AccessLevel.NONE)
+    @Column(name = "AVATAR_VERSION")
+    private Long avatarVersion = 0L;
 
     @Column(name = "ACCOUNT_TYPE")
     @Enumerated(EnumType.STRING)
@@ -75,5 +80,16 @@ public class AuthUser {
         return roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
+    }
+
+    public void incrementAvatarVersion() {
+        if (avatarVersion == null) {
+            avatarVersion = 0L;
+        }
+        avatarVersion++;
+    }
+
+    public void setDefaultAvatarVersion() {
+        avatarVersion = 0L;
     }
 }

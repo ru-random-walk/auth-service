@@ -8,6 +8,40 @@ jwt:
   expire-time-in-seconds: 3600
   refresh-token-expire-time-in-days: 7
 
+storage:
+  endpoint: ${STORAGE_ENDPOINT}
+  bucketName: ${STORAGE_BUCKET_NAME}
+  accessKey: ${STORAGE_ACCESS_KEY}
+  secretKey: ${STORAGE_SECRET_KEY}
+  region: ${STORAGE_REGION}
+  temporaryUrlTtlInMinutes: 5
+  servicePath: auth-service
+
+
+#  period-duration описание - где P это дата, а T это время
+#  # 12 часов
+#  rate-limiter.uploadPhotoForClubRateLimiter.period-duration=PT12H
+#
+#  # 1 день
+#  rate-limiter.uploadPhotoForClubRateLimiter.period-duration=P1D
+#
+#  # 2 дня и 3 часа
+#  rate-limiter.uploadPhotoForClubRateLimiter.period-duration=P2DT3H
+#
+#  # 1 неделя (7 дней)
+#  rate-limiter.uploadPhotoForClubRateLimiter.period-duration=P7D
+#
+#  # 1 месяц и 15 минут
+#  rate-limiter.uploadPhotoForClubRateLimiter.period-duration=P1MT15M
+#
+#  # 2 года, 3 месяца, 4 дня, 5 часов, 6 минут и 7 секунд
+#  rate-limiter.uploadPhotoForClubRateLimiter.period-duration=P2Y3M4DT5H6M7S
+rate-limiter:
+  uploadUserAvatarRateLimiter:
+    period-duration: PT30S
+  getUserAvatarRateLimiter:
+    period-duration: PT15S
+
 spring:
   application:
     name: AuthService

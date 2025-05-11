@@ -13,8 +13,6 @@ import ru.random.walk.authservice.service.UserService;
 import ru.random.walk.authservice.service.client.YandexAuthClient;
 import ru.random.walk.authservice.service.mapper.AuthUserMapper;
 
-import java.util.Objects;
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -36,7 +34,7 @@ public class YandexAccessTokenExchanger implements AccessTokenExchanger {
     public AuthUser exchange(String subjectToken) {
         var userInfoDto = tryToGetUserInfo(subjectToken);
         return userService.findByEmail(userInfoDto.email())
-                .map(user -> useExistingUser(user, userInfoDto))
+                .map(this::useExistingUser)
                 .orElseGet(() -> createNewUser(userInfoDto));
     }
 
@@ -54,23 +52,14 @@ public class YandexAccessTokenExchanger implements AccessTokenExchanger {
         }
     }
 
-    private AuthUser useExistingUser(AuthUser user, YandexUserInfoDto userInfoDto) {
+    private AuthUser useExistingUser(AuthUser user) {
         if (user.getAuthType() != AuthType.YANDEX) {
             throw new AuthBadRequestException("User with this email already exists");
         }
-        refreshAvatar(user, userInfoDto);
 
         return user;
     }
 
-    private void refreshAvatar(AuthUser user, YandexUserInfoDto userInfoDto) {
-        if (Boolean.FALSE.equals(userInfoDto.isAvatarEmpty())) {
-            String avatarUrl = getAvatarUrl(userInfoDto.avatarId());
-            if (!Objects.equals(user.getAvatar(), avatarUrl)) {
-                user.setAvatar(avatarUrl);
-            }
-        }
-    }
 
     private AuthUser createNewUser(YandexUserInfoDto userInfoDto) {
         var newUser = authUserMapper.fromYandexDto(userInfoDto, getAvatarUrl(userInfoDto.avatarId()));
