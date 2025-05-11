@@ -30,6 +30,14 @@ repositories {
             password = project.findProperty("token") ?: System.getenv("GITHUB_TOKEN")
         }
     }
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/ru-random-walk/storage-client")
+        credentials {
+            username = project.findProperty("user") ?: System.getenv("GITHUB_ACTOR")
+            password = project.findProperty("token") ?: System.getenv("GITHUB_TOKEN")
+        }
+    }
 }
 
 dependencies {
@@ -50,6 +58,7 @@ dependencies {
     implementation 'com.google.api-client:google-api-client:2.7.0'
     implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.3.Final'
     implementation 'ru.random.walk:event-exchange-contract:1.2.5'
+    implementation 'ru.random.walk:storage-client:2.0.1'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
