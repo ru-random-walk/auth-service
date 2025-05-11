@@ -31,7 +31,7 @@ public class ControllerAdvice {
                 .body(new ApiErrorDto(e.getMessage()));
     }
 
-    @ExceptionHandler({AuthAuthorizationException.class})
+    @ExceptionHandler({AuthTooManyRequestsException.class})
     @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
     public ResponseEntity<ApiErrorDto> exceptionHandler(AuthTooManyRequestsException e) {
         log.warn("Oauth2 exception", e);
