@@ -136,7 +136,7 @@ public class UserServiceImpl implements UserService {
         try (var photoIO = file.getInputStream()) {
             return storageClient.uploadAndGetUrl(photoIO, getAvatarStorageKey(userId), FileType.PNG);
         } catch (Exception e) {
-            throw new RuntimeException("Error uploading user's avatar");
+            throw new RuntimeException("Error uploading user's avatar", e);
         }
     }
 
