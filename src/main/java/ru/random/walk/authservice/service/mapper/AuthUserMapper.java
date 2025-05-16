@@ -34,8 +34,10 @@ public interface AuthUserMapper {
 
     RegisteredUserInfoEvent toEventDto(AuthUser user);
 
+    @Mapping(source = "externalAvatarUrl", target = "avatar")
     UserDto toUserDto(AuthUser user);
 
+    @Mapping(source = "externalAvatarUrl", target = "avatar")
     DetailedUserDto toDetailedUserDto(AuthUser user);
 
     default AuthUser createCustomUser(String email, AuthType authType) {
