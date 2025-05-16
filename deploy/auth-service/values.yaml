@@ -99,8 +99,8 @@ resources:
     cpu: 1000m
     memory: 1024Mi
   requests:
-    cpu: 10m
-    memory: 512Mi
+    cpu: 100m
+    memory: 768Mi
 
 livenessProbe:
   httpGet:
@@ -125,7 +125,7 @@ autoscaling:
   enabled: true
   minReplicas: 1
   maxReplicas: 4
-  targetCPUUtilizationPercentage: 60
+  targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
   scaleUp:
     stabilizationWindowSeconds: 300
