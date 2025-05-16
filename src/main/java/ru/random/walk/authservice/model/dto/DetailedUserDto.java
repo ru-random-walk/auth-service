@@ -6,6 +6,6 @@ public record DetailedUserDto(
         UUID id,
         String fullName,
         String email,
-        String externalAvatarUrl
+        String avatar
 ) {
 }

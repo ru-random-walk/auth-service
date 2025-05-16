@@ -41,6 +41,26 @@ secrets:
     secret_key: AUTH_JWT_PUBLIC_KEY
     secret_name: auth-secret
 
+  - name: STORAGE_ENDPOINT
+    secret_key: STORAGE_ENDPOINT
+    secret_name: storage-secret
+
+  - name: STORAGE_BUCKET_NAME
+    secret_key: STORAGE_BUCKET_NAME
+    secret_name: storage-secret
+
+  - name: STORAGE_ACCESS_KEY
+    secret_key: STORAGE_ACCESS_KEY
+    secret_name: storage-secret
+
+  - name: STORAGE_SECRET_KEY
+    secret_key: STORAGE_SECRET_KEY
+    secret_name: storage-secret
+
+  - name: STORAGE_REGION
+    secret_key: STORAGE_REGION
+    secret_name: storage-secret
+
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -79,8 +99,8 @@ resources:
     cpu: 1000m
     memory: 1024Mi
   requests:
-    cpu: 10m
-    memory: 512Mi
+    cpu: 500m
+    memory: 768Mi
 
 livenessProbe:
   httpGet:
@@ -102,11 +122,21 @@ readinessProbe:
   timeoutSeconds: 5
 
 autoscaling:
-  enabled: false
+  enabled: true
   minReplicas: 1
-  maxReplicas: 100
+  maxReplicas: 4
   targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+  scaleUp:
+    stabilizationWindowSeconds: 300
+    pods:
+      count: 1
+      periodSeconds: 150
+  scaleDown:
+    stabilizationWindowSeconds: 600
+
+
+
 
 # Additional volumes on the output Deployment definition.
 volumes: []
