@@ -59,7 +59,7 @@ public class UserController {
     }
 
     @Operation(summary = "Logout and remove user's refresh token")
-    @PostMapping("/logout")
+    @PostMapping("/userinfo/logout")
     public void logOut(Principal principal) {
         log.info("Logging out user {}", principal.getName());
         userFacade.logoutUser(principal.getName());
