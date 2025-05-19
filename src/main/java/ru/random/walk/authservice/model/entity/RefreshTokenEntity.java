@@ -1,7 +1,6 @@
 package ru.random.walk.authservice.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,13 +18,7 @@ import java.util.UUID;
 public class RefreshTokenEntity {
     @Id
     @Column(name = "user_id")
-    @Setter(AccessLevel.NONE)
     private UUID userId;
-
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private AuthUser user;
 
     @Column(name = "token")
     private UUID token;

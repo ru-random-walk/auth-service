@@ -73,9 +73,6 @@ public class AuthUser {
     )
     private List<Role> roles = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private RefreshTokenEntity refreshToken;
-
     public List<GrantedAuthority> getAuthorities() {
         return roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))

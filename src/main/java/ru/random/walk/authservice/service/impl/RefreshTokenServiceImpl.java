@@ -36,7 +36,6 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
         if (optionalRefreshToken.isEmpty()) {
             optionalRefreshToken = Optional.of(new RefreshTokenEntity());
-            optionalRefreshToken.get().setUser(authUser);
         }
 
         var refreshToken = optionalRefreshToken.get();
