@@ -11,6 +11,7 @@ import ru.random.walk.authservice.model.entity.RefreshTokenEntity;
 import ru.random.walk.authservice.model.exception.AuthAuthorizationException;
 import ru.random.walk.authservice.service.JwtService;
 import ru.random.walk.authservice.service.RefreshTokenService;
+import ru.random.walk.authservice.service.UserService;
 
 import java.time.LocalDateTime;
 
@@ -22,6 +23,7 @@ public class OAuth2RefreshTokenProvider implements OAuth2TokenProvider {
 
     private final RefreshTokenService refreshTokenService;
     private final JwtService jwtService;
+    private final UserService userService;
 
 
     @Override
@@ -35,7 +37,7 @@ public class OAuth2RefreshTokenProvider implements OAuth2TokenProvider {
         var request = (RefreshTokenRequest) tokenRequest;
         var existingToken = refreshTokenService.getRefreshToken(request.getRefreshToken());
         checkNotExpired(existingToken);
-        var user = existingToken.getUser();
+        var user = userService.findById(existingToken.getUserId());
 
         return jwtService.generateToken(tokenRequest, user);
     }
