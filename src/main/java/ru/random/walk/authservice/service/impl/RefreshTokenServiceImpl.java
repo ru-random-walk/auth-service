@@ -39,6 +39,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         }
 
         var refreshToken = optionalRefreshToken.get();
+        refreshToken.setUserId(authUser.getId());
         refreshToken.setToken(UUID.randomUUID());
         refreshToken.setExpiresAt(LocalDateTime.now().plusDays(jwtProperties.getRefreshTokenExpireTimeInDays()));
 
