@@ -7,6 +7,7 @@ public record DetailedUserDto(
         String fullName,
         String email,
         String avatar,
-        String description
+        String description,
+        Long avatarVersion
 ) {
 }
