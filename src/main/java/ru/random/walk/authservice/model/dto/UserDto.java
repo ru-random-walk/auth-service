@@ -6,6 +6,7 @@ public record UserDto(
         UUID id,
         String fullName,
         String avatar,
-        String description
+        String description,
+        Long avatarVersion
 ) {
 }
