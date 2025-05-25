@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import ru.random.walk.authservice.model.dto.ChangeUserInfoDto;
@@ -66,7 +67,7 @@ public class UserController {
     }
 
     @PutMapping("/userinfo/avatar/upload")
-    public UserAvatarUrlDto uploadAvatar(@RequestParam("file") MultipartFile file, Principal principal) {
+    public UserAvatarUrlDto uploadAvatar(@RequestPart("file") MultipartFile file, Principal principal) {
         UUID userId = UUID.fromString(principal.getName());
         uploadUserAvatarRateLimiter.throwIfRateLimitExceeded(
                 userId,
