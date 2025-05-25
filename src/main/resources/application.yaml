@@ -3,6 +3,9 @@ auth:
     google-auth-url: https://www.googleapis.com
   yandex:
     yandex-auth-url: https://login.yandex.ru
+  vk:
+    vk-auth-url: https://id.vk.com/oauth2
+    client-id: ${VK_CLIENT_ID:xxx}
 
 jwt:
   expire-time-in-seconds: 3600
