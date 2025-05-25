@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
     public void removeAvatar(UUID userId) {
         log.info("Removing avatar for user {}", userId);
         AuthUser user = findById(userId);
-        user.setDefaultAvatarVersion();
+        user.incrementAvatarVersion();
         user.setExternalAvatarUrl(null);
 
         String storageKey = getAvatarStorageKey(userId);

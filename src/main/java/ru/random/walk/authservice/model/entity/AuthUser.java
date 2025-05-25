@@ -86,7 +86,4 @@ public class AuthUser {
         avatarVersion++;
     }
 
-    public void setDefaultAvatarVersion() {
-        avatarVersion = 0L;
-    }
 }
