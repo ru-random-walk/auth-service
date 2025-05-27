@@ -45,6 +45,9 @@ rate-limiter:
 spring:
   application:
     name: AuthService
+  servlet:
+    multipart:
+      max-file-size: 10MB
   flyway:
     enabled: true
   kafka:
