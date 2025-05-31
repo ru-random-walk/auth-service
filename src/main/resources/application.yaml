@@ -41,6 +41,10 @@ rate-limiter:
     period-duration: PT30S
   getUserAvatarRateLimiter:
     period-duration: PT15S
+  emailOtpTokenRequestRateLimiter:
+    period-duration: PT15S
+  emailOtpCodeRateLimiter:
+    period-duration: PT1M
 
 spring:
   application:
