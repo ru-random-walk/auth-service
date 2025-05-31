@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import ru.random.walk.authservice.model.dto.token.EmailOtpTokenRequest;
 import ru.random.walk.authservice.model.dto.token.TokenRequest;
 import ru.random.walk.authservice.model.exception.AuthBadRequestException;
+import ru.random.walk.authservice.model.exception.AuthTooManyRequestsException;
+import ru.random.walk.util.KeyRateLimiter;
 
 import java.util.Map;
 
@@ -14,8 +16,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CustomEmailOtpTokenRequestFactory implements OAuth2TokenRequestFactory {
 
-    public static final String CUSTOM_EMAIL_OTP_GRANT_TYPE = "email_otp";
+    private final KeyRateLimiter<String> emailOtpTokenRequestRateLimiter;
 
+    public static final String CUSTOM_EMAIL_OTP_GRANT_TYPE = "email_otp";
     private static final String EMAIL_KEY = "email";
     private static final String OTP_KEY = "otp";
 
@@ -31,6 +34,11 @@ public class CustomEmailOtpTokenRequestFactory implements OAuth2TokenRequestFact
         }
         String email = (String) body.get(EMAIL_KEY);
         String otp = (String) body.get(OTP_KEY);
+
+        emailOtpTokenRequestRateLimiter.throwIfRateLimitExceeded(
+                email,
+                () -> new AuthTooManyRequestsException("Limit exceeded for email_otp token generation")
+        );
 
         return EmailOtpTokenRequest.builder()
                 .oneTimePassword(otp)

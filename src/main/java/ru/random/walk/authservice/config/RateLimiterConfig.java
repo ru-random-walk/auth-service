@@ -25,4 +25,20 @@ public class RateLimiterConfig {
     ) {
         return new KeyRateLimiter<>(period);
     }
+
+    @Bean
+    public KeyRateLimiter<String> emailOtpTokenRequestRateLimiter(
+            @Value("${rate-limiter.emailOtpTokenRequestRateLimiter.period-duration}")
+            Duration period
+    ) {
+        return new KeyRateLimiter<>(period);
+    }
+
+    @Bean
+    public KeyRateLimiter<String> emailOtpCodeRateLimiter(
+            @Value("${rate-limiter.emailOtpCodeRateLimiter.period-duration}")
+            Duration period
+    ) {
+        return new KeyRateLimiter<>(period);
+    }
 }
