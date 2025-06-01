@@ -31,7 +31,7 @@ public class UserFacadeImpl implements UserFacade {
     private final AuthUserMapper userMapper;
     private final RefreshTokenService refreshTokenService;
 
-    private static final Set<String> ALLOWED_EXTENSIONS = Set.of("jpg", "jpeg", "png");
+    private static final Set<String> ALLOWED_EXTENSIONS = Set.of("jpg", "jpeg", "png", "gif");
 
     @Override
     public Page<UserDto> getUsers(List<UUID> ids, Pageable pageable) {
