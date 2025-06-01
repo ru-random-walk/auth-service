@@ -11,7 +11,8 @@ import java.util.Arrays;
 public enum AuthType {
     PASSWORD("password"),
     GOOGLE("google"),
-    YANDEX("yandex");
+    YANDEX("yandex"),
+    VK("vk");
 
     private final String name;
 

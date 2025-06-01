@@ -7,6 +7,7 @@ import ru.random.walk.authservice.model.dto.DetailedUserDto;
 import ru.random.walk.authservice.model.dto.UserAvatarUrlDto;
 import ru.random.walk.authservice.model.dto.clients.GoogleUserInfoDto;
 import ru.random.walk.authservice.model.dto.UserDto;
+import ru.random.walk.authservice.model.dto.clients.VkUserInfoDto;
 import ru.random.walk.authservice.model.dto.clients.YandexUserInfoDto;
 import ru.random.walk.authservice.model.enam.AuthType;
 import ru.random.walk.authservice.model.entity.AuthUser;
@@ -32,6 +33,13 @@ public interface AuthUserMapper {
     @Mapping(target = "externalAvatarUrl", source = "avatarUrl")
     AuthUser fromYandexDto(YandexUserInfoDto userInfoDto, String avatarUrl);
 
+    @Mapping(target = "fullName", source = "userInfoDto.user", qualifiedByName = "getFullNameFromVK")
+    @Mapping(target = "email", source = "userInfoDto.user.email")
+    @Mapping(target = "username", expression = "java(java.util.UUID.randomUUID().toString())")
+    @Mapping(target = "authType", expression = "java(ru.random.walk.authservice.model.enam.AuthType.VK)")
+    @Mapping(target = "externalAvatarUrl", source = "userInfoDto.user.avatar")
+    AuthUser fromVkDto(VkUserInfoDto userInfoDto);
+
     RegisteredUserInfoEvent toEventDto(AuthUser user);
 
     @Mapping(source = "externalAvatarUrl", target = "avatar")
@@ -56,5 +64,10 @@ public interface AuthUserMapper {
     @Named("getFullNameFromYandex")
     default String getFullNameFromYandex(YandexUserInfoDto userInfoDto) {
         return String.format("%s %s", userInfoDto.firstName(), userInfoDto.lastName()).trim();
+    }
+
+    @Named("getFullNameFromVK")
+    default String getFullNameFromYandex(VkUserInfoDto.VkUserDto userDto) {
+        return String.format("%s %s", userDto.firstName(), userDto.lastName()).trim();
     }
 }

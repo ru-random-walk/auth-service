@@ -61,6 +61,10 @@ secrets:
     secret_key: STORAGE_REGION
     secret_name: storage-secret
 
+  - name: VK_CLIENT_ID
+    secret_key: VK_CLIENT_ID
+    secret_name: auth-secret
+
 
 serviceAccount:
   # Specifies whether a service account should be created

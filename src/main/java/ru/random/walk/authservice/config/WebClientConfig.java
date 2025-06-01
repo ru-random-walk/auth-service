@@ -6,6 +6,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.support.WebClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 import ru.random.walk.authservice.service.client.GoogleAuthClient;
+import ru.random.walk.authservice.service.client.VkAuthClient;
 import ru.random.walk.authservice.service.client.YandexAuthClient;
 
 @Configuration
@@ -31,5 +32,16 @@ public class WebClientConfig {
                 .builderFor(WebClientAdapter.create(client))
                 .build();
         return httpServiceProxyFactory.createClient(YandexAuthClient.class);
+    }
+
+    @Bean
+    public VkAuthClient vkAuthClient(AuthServiceProperties properties) {
+        var client = WebClient.builder()
+                .baseUrl(properties.getVk().getVkAuthUrl())
+                .build();
+        var httpServiceProxyFactory = HttpServiceProxyFactory
+                .builderFor(WebClientAdapter.create(client))
+                .build();
+        return httpServiceProxyFactory.createClient(VkAuthClient.class);
     }
 }
