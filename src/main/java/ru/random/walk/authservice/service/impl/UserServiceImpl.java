@@ -43,7 +43,6 @@ public class UserServiceImpl implements UserService {
     private final AuthUserMapper userMapper;
     private final StorageClient storageClient;
     private final StorageProperties storageProperties;
-    private static final String AVATAR_OBJECT_PREFIX = "avatar/";
     private static final EnumSet<RoleName> DEFAULT_USER_ROLES = EnumSet.of(DEFAULT_USER);
 
     @Override
@@ -58,7 +57,7 @@ public class UserServiceImpl implements UserService {
         authUser.getRoles().addAll(defaultRoles);
 
         var newUser = userRepository.save(authUser);
-        sendNewUserEvent(newUser);
+        sendUserInfoEvent(newUser);
 
         return newUser;
     }
@@ -77,9 +76,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public AuthUser changeUser(UUID id, ChangeUserInfoDto changeDto) {
         AuthUser user = findById(id);
+        boolean isFullNameChanged = !Objects.equals(changeDto.fullName(), user.getFullName());
+
         user.setFullName(changeDto.fullName());
         user.setDescription(changeDto.aboutMe());
-        return userRepository.save(user);
+        user = userRepository.save(user);
+
+        if (isFullNameChanged) {
+            sendUserInfoEvent(user);
+        }
+
+        return user;
     }
 
     @Transactional
@@ -127,7 +134,7 @@ public class UserServiceImpl implements UserService {
         log.info("Avatar was removed for user {}", userId);
     }
 
-    private void sendNewUserEvent(AuthUser newUser) {
+    private void sendUserInfoEvent(AuthUser newUser) {
         var eventDto = userMapper.toEventDto(newUser);
         outboxSenderService.sendMessageByOutbox(EventTopic.USER_REGISTRATION, eventDto);
     }
